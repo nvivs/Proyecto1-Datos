@@ -11,7 +11,7 @@ public class View extends JFrame{
     private JMenuItem quitItem;
 
     public View() {
-        setupComponents(getContentPane());
+        panel = setupComponents(getContentPane());
     }
 
 //    private void creaPanel(){
@@ -94,12 +94,12 @@ public class View extends JFrame{
         }
     }
 
-    private void setupComponents(Container c) {
+    private JPanel setupComponents(Container c) {
         c.setLayout(new BorderLayout());
 
         setupMenus();
 
-        panel = new JPanel() {
+        JPanel mainPanel = new JPanel() {
             @Override
             public void paintComponent(Graphics bg) {
                 super.paintComponent(bg);
@@ -149,10 +149,10 @@ public class View extends JFrame{
                     Color.GREEN,
                     Color.YELLOW,
                     new Color(72, 72, 255),
-//                Color.RED.darker(),
-//                Color.GREEN.darker(),
-//                Color.YELLOW.darker(),
-//                new Color(72, 72, 255).darker(),
+//                    Color.RED.darker(),
+//                    Color.GREEN.darker(),
+//                    Color.YELLOW.darker(),
+//                    new Color(72, 72, 255).darker(),
                     Color.ORANGE,
                     Color.PINK,
                     Color.WHITE
@@ -160,9 +160,9 @@ public class View extends JFrame{
 
         };
 
-        panel.setBackground(Color.WHITE);
-        panel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
-        panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+        mainPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         c.add(BorderLayout.CENTER, panel);
 
         //c.add(BorderLayout.PAGE_END, status = new StatusBar());
@@ -170,6 +170,8 @@ public class View extends JFrame{
         // Define los eventos asociados a cada componente de la ventana.
         // Los menús son configurados en un método separado.
         //
+
+        return mainPanel;
     }
 
 

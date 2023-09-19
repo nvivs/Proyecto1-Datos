@@ -15,7 +15,6 @@ public class Application {
         window.setSize(900,450);
         window.setResizable(true);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        //window.setIconImage((new ImageIcon(Objects.requireNonNull(Application.class.getResource("main/InstrumentTypes/presentation/icons/icon.png")))).getImage());
         window.setTitle("Prueba");
         window.setVisible(true);
     }
