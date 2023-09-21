@@ -1,23 +1,32 @@
 package Proyecto.MVC;
 
+import Proyecto.Util.QueueException;
 import Proyecto.logic.SequencePartColor;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Timer;
 
+import static java.lang.Thread.sleep;
+
 public class View extends JFrame implements Observer {
     private JPanel panel;
     private JLabel Puntuación;
+    private JLabel tiempo;
     private JButton[] botones;
+    int tiempoRestante;
+    int tiempoTotal;
 
-    public View() {
-
+    public View() throws InterruptedException, UnsupportedAudioFileException, QueueException, IOException {
 //            botones[0].addActionListener(new ActionListener() {
 //                @Override
 //                public void actionPerformed(ActionEvent e) {
@@ -47,65 +56,59 @@ public class View extends JFrame implements Observer {
 //            });
 
         // Hacer visible la ventan
-        setVisible(true);
-        setTitle("Simon Dice");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(503, 530);
-        setLayout(new GridLayout(2, 2));
-
-        if(botones[0] != null){
-            botones[0].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-
-                }
-            });
-        }
-
-        if(botones[1] != null){
-            botones[1].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-
-                }
-            });
-        }
-
-        if(botones[2] != null){
-            botones[2].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-
-                }
-            });
-        }
-
-        if(botones[3] != null){
-            botones[3].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-
-                }
-            });
-        }
-
-        if(botones[4] != null){
-            botones[4].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-
-                }
-            });
-        }
-
-        if(botones[5] != null){
-            botones[5].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-
-                }
-            });
-        }
+//        if(botones[0] != null){
+//            botones[0].addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    check(0);
+//                }
+//            });
+//        }
+//
+//        if(botones[1] != null){
+//            botones[1].addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    check(1);
+//                }
+//            });
+//        }
+//
+//        if(botones[2] != null){
+//            botones[2].addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    check(2);
+//                }
+//            });
+//        }
+//
+//        if(botones[3] != null){
+//            botones[3].addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    check(3);
+//                }
+//            });
+//        }
+//
+//        if(botones[4] != null){
+//            botones[4].addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    check(4);
+//                }
+//            });
+//        }
+//
+//        if(botones[5] != null){
+//            botones[5].addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    check(5);
+//                }
+//            });
+//        }
         // Crea los botones y configura su apariencia
         // botones = new JButton[4]; // Cambia el número según tus botones
         // for (int i = 0; i < botones.length; i++) {
@@ -173,6 +176,33 @@ public class View extends JFrame implements Observer {
         model.addObserver(this);
     }
 
+    public void check(int i){
+        try {
+            controller.check((ImageIcon) botones[i].getIcon());
+        } catch (QueueException ex) {// si ganó
+            JOptionPane.showMessageDialog(panel, "Haz completado la secuencia correctamente", "HAZ GANADO", JOptionPane.INFORMATION_MESSAGE);
+            controller.win(tiempoTotal, tiempoRestante);
+        }
+        catch (RuntimeException ex){// si perdió
+            JOptionPane pane = new JOptionPane();
+            pane.showMessageDialog(panel, "Haz fallado al imitar la secuencia", "HAZ PERDIDO", JOptionPane.INFORMATION_MESSAGE);
+            pane.addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentHidden(ComponentEvent e) {
+                    super.componentHidden(e);
+                    try {
+                        controller.fail();
+                    } catch (UnsupportedAudioFileException | QueueException | IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            });
+        }
+        catch (UnsupportedAudioFileException | IOException ex){
+            throw new RuntimeException(ex);
+        }
+    }
+
     public void iniciaBotones(int tam){
         for (int i = 0; i < tam; i++) {
             botones[i].setBorderPainted(false);
@@ -186,26 +216,43 @@ public class View extends JFrame implements Observer {
         }
     }
 
-    public void reproduceSecuencia() throws InterruptedException {
+    public int reproduceSecuencia() throws InterruptedException {
         for(int i = 0; i < model.getBotones().length; i++){
             botones[i].setIcon(model.getSecuencia().iterator().next().getColor());
+            try(Clip clip = AudioSystem.getClip()){
+                clip.open(model.getSecuencia().iterator().next().getSound());
+                clip.start();
+                //Thread.sleep(clip.getMicrosecondLength() / 1_000);
+            } catch (IOException
+                     //| InterruptedException
+                     | LineUnavailableException ex) {
+                System.err.printf("Excepción: '%s'%n", ex.getMessage());
+            }
             if(model.getNivel() == 1) {
-                Thread.sleep(5000);
+                sleep(5000);
+                tiempoRestante = 30;
             }else if(model.getNivel() <= 4){
-                Thread.sleep(4000);
+                sleep(4000);
+                tiempoRestante = 25;
             }else if(model.getNivel() <= 7){
-                Thread.sleep(3000);
+                sleep(3000);
+                tiempoRestante = 20;
             }else if(model.getNivel() <= 10){
-                Thread.sleep(2000);
+                sleep(2000);
+                tiempoRestante = 15;
             }else if(model.getNivel() <= 13){
-                Thread.sleep(1000);
+                sleep(1000);
+                tiempoRestante = 10;
             }else if(model.getNivel() <= 15){
-                Thread.sleep(500);
+                sleep(500);
+                tiempoRestante = 5;
             }else if(model.getNivel() > 15){
-                Thread.sleep(100);
+                sleep(100);
+                tiempoRestante = 2;
             }
             botones = model.getBotones();
         }
+        return tiempoRestante;
     }
 
     @Override
@@ -215,11 +262,50 @@ public class View extends JFrame implements Observer {
         if((changedProps & Model.BOTONS) == Model.BOTONS){
             botones = model.getBotones();
             iniciaBotones(botones.length);
+            for(int i = 0; i < botones.length; i++){
+                if(botones[i] != null){
+                    int finalI = i;
+                    botones[i].addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            check(finalI);
+                        }
+                    });
+                }
+            }
         }
 
         if((changedProps & Model.SEQUENCE) == Model.SEQUENCE){
             try {
-                reproduceSecuencia();
+                tiempoRestante = reproduceSecuencia();
+                tiempo.setText(String.valueOf(tiempoRestante));
+                Thread thread = new Thread(() -> {
+                    for (int i = tiempoRestante; i >= 0; i++) {
+                        tiempo.setText(String.valueOf(i));
+                        tiempoTotal = tiempoRestante - i;
+                        try {
+                            sleep(1000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        if (i == 0) {
+                            JOptionPane pane = new JOptionPane();
+                            pane.showMessageDialog(panel, "Te has quedado sin tiempo", "HAZ PERDIDO", JOptionPane.INFORMATION_MESSAGE);
+                            pane.addComponentListener(new ComponentAdapter() {
+                                @Override
+                                public void componentHidden(ComponentEvent e) {
+                                    super.componentHidden(e);
+                                    try {
+                                        controller.fail();
+                                    } catch (UnsupportedAudioFileException | QueueException | IOException ex) {
+                                        throw new RuntimeException(ex);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+                thread.start();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

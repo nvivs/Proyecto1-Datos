@@ -39,6 +39,9 @@ public class Model extends java.util.Observable{
 
     public void init(){
         botones = new JButton[4];
+        for(int i = 0; i < 4; i++){
+            botones[i] = new JButton();
+        }
         botones[0].setIcon(SequencePartColor.instance().getRED());
         botones[1].setIcon(SequencePartColor.instance().getGREEN());
         botones[2].setIcon(SequencePartColor.instance().getYELLOW());

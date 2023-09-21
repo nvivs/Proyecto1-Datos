@@ -30,18 +30,26 @@ public class Controller {
         model.commit();
     }
 
-    public void check(ImageIcon color, int totalTime, int timeSpend) throws Exception {
+    public void check(ImageIcon color) throws QueueException, UnsupportedAudioFileException, IOException {
         try {
             Service.instance().check(color);
         }catch (QueueException e){// llego al final (acertó)
-            model.setNivel(Service.instance().increaseLevel());
-            model.setScore(Service.instance().updateScore(totalTime, timeSpend));
-            model.commit();
+            throw new QueueException();
         }
         catch (Exception e){// si falló
-            model.init();
-            createSequence();
+            throw new RuntimeException();
         }
+    }
+
+    public void fail() throws UnsupportedAudioFileException, QueueException, IOException {
+        model.init();
+        createSequence();
+    }
+
+    public void win(int totalTime, int timeSpend){
+        model.setNivel(Service.instance().increaseLevel());
+        model.setScore(Service.instance().updateScore(totalTime, timeSpend));
+        model.commit();
     }
 
     public void newLevel(JButton[] botones){
