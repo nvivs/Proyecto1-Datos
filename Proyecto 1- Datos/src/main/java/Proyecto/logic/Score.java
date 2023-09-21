@@ -19,7 +19,7 @@ public class Score {
         this.score = score;
     }
 
-    public void updateScore(int totalTime, int timeSpend){
+    public int updateScore(int totalTime, int timeSpend){
         score += 100;
         float x = (float) totalTime / 4;//un cuarto de tiempo total
 
@@ -30,5 +30,6 @@ public class Score {
         }else if(timeSpend < x){// si duró menos de 1 cuarto del tiempo total
             score += 5;
         }
+        return score;
     }
 }

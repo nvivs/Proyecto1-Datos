@@ -12,7 +12,8 @@ public class Level {
         return level;
     }
 
-    public void increase(){
+    public int increase(){
         level += 1;
+        return level;
     }
 }

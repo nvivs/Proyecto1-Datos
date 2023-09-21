@@ -1,87 +1,120 @@
 package Proyecto.MVC;
 
+import Proyecto.logic.SequencePartColor;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Timer;
 
-public class View extends JFrame{
+public class View extends JFrame implements Observer {
     private JPanel panel;
+    private JLabel Puntuación;
+    private JButton[] botones;
 
-    private JButton[] botones; // Arreglo de botones a iluminar
-        //private int indiceIluminado; // Índice del botón que se ilumina actualmente
-        private Timer timer; // Temporizador para la secuencia de iluminación
+    public View() {
 
-        public View() {
+//            botones[0].addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    System.out.println("Se clickeo el boton rojo");
+//                }
+//            });
+//
+//            botones[1].addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    System.out.println("Se clickeo el boton verde");
+//                }
+//            });
+//
+//            botones[2].addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    System.out.println("Se clickeo el boton azul");
+//                }
+//            });
+//
+//            botones[3].addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    System.out.println("Se clickeo el boton amarillo");
+//                }
+//            });
 
-            botones = new JButton[4];
-            for (int i = 0; i < 4; i++) {
-                botones[i] = new JButton();
-            }
-            botones[0].setIcon(new ImageIcon("Proyecto 1- Datos/src/main/resources/rojo.png"));
-            botones[1].setIcon(new ImageIcon("Proyecto 1- Datos/src/main/resources/verde.png"));
-            botones[2].setIcon(new ImageIcon("Proyecto 1- Datos/src/main/resources/amarillo.png"));
-            botones[3].setIcon(new ImageIcon("Proyecto 1- Datos/src/main/resources/azul.png"));
-            for (int i = 0; i < 4; i++) {
-                botones[i].setBorderPainted(false);
-                botones[i].setContentAreaFilled(false);
-            }
+        // Hacer visible la ventan
+        setVisible(true);
+        setTitle("Simon Dice");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(503, 530);
+        setLayout(new GridLayout(2, 2));
 
-            setLayout(null);
-            botones[0].setBounds(20, 30, 500, 600);
-            botones[1].setBounds(210, 30, 500, 600);
-            botones[2].setBounds(20, 225, 500, 600);
-            botones[3].setBounds(210, 225, 500, 600);
-
-            for (int i = 0; i < 4; i++) {
-                getContentPane().add(botones[i]);
-            }
-
+        if(botones[0] != null){
             botones[0].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Se clickeo el boton rojo");
+
                 }
             });
+        }
 
+        if(botones[1] != null){
             botones[1].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Se clickeo el boton verde");
+
                 }
             });
+        }
 
+        if(botones[2] != null){
             botones[2].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Se clickeo el boton azul");
+
                 }
             });
+        }
 
+        if(botones[3] != null){
             botones[3].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Se clickeo el boton amarillo");
+
                 }
             });
+        }
 
-            // Hacer visible la ventana
-            setVisible(true);
-            setTitle("Simon Dice");
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setSize(400, 400);
-            setLayout(new GridLayout(2, 2)); // Cambia el diseño según tus botones
+        if(botones[4] != null){
+            botones[4].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
 
-            // Crea los botones y configura su apariencia
-            // botones = new JButton[4]; // Cambia el número según tus botones
-            // for (int i = 0; i < botones.length; i++) {
-            //   botones[i] = new JButton("Botón " + (i + 1));
-            // botones[i].setBackground(Color.BLACK); // Establece el color de fondo
-            // botones[i].setOpaque(true);
-            // botones[i].setEnabled(false); // Desactiva los botones inicialmente
-            // add(botones[i]);
-            // }
+                }
+            });
+        }
+
+        if(botones[5] != null){
+            botones[5].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+        }
+        // Crea los botones y configura su apariencia
+        // botones = new JButton[4]; // Cambia el número según tus botones
+        // for (int i = 0; i < botones.length; i++) {
+        //   botones[i] = new JButton("Botón " + (i + 1));
+        // botones[i].setBackground(Color.BLACK); // Establece el color de fondo
+        // botones[i].setOpaque(true);
+        // botones[i].setEnabled(false); // Desactiva los botones inicialmente
+        // add(botones[i]);
+        // }
 
 //            int x=0;
 //            // Inicializa el temporizador con un retraso de 1 segundo
@@ -126,5 +159,78 @@ public class View extends JFrame{
 //            // indiceIluminado = 0;
 //            timer.start();
 //        }
+    }
+
+    Controller controller;
+    Model model;
+
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
+        model.addObserver(this);
+    }
+
+    public void iniciaBotones(int tam){
+        for (int i = 0; i < tam; i++) {
+            botones[i].setBorderPainted(false);
+            botones[i].setContentAreaFilled(false);
         }
+
+        setLayout(null);
+
+        for (int i = 0; i < tam; i++) {
+            getContentPane().add(botones[i]);
+        }
+    }
+
+    public void reproduceSecuencia() throws InterruptedException {
+        for(int i = 0; i < model.getBotones().length; i++){
+            botones[i].setIcon(model.getSecuencia().iterator().next().getColor());
+            if(model.getNivel() == 1) {
+                Thread.sleep(5000);
+            }else if(model.getNivel() <= 4){
+                Thread.sleep(4000);
+            }else if(model.getNivel() <= 7){
+                Thread.sleep(3000);
+            }else if(model.getNivel() <= 10){
+                Thread.sleep(2000);
+            }else if(model.getNivel() <= 13){
+                Thread.sleep(1000);
+            }else if(model.getNivel() <= 15){
+                Thread.sleep(500);
+            }else if(model.getNivel() > 15){
+                Thread.sleep(100);
+            }
+            botones = model.getBotones();
+        }
+    }
+
+    @Override
+    public void update(Observable o, Object properties) {
+        int changedProps = (int) properties;
+
+        if((changedProps & Model.BOTONS) == Model.BOTONS){
+            botones = model.getBotones();
+            iniciaBotones(botones.length);
+        }
+
+        if((changedProps & Model.SEQUENCE) == Model.SEQUENCE){
+            try {
+                reproduceSecuencia();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if((changedProps & Model.LEVEL) == Model.LEVEL){
+            controller.newLevel(botones);
+        }
+
+        if((changedProps & Model.SCORE) == Model.SCORE){
+            Puntuación.setText(String.valueOf(model.getScore()));
+        }
+    }
 }

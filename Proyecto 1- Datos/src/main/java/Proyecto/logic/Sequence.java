@@ -25,7 +25,7 @@ public class Sequence {
         this.sequence = sequence;
     }
 
-    public void createSequence(int level) throws QueueException, UnsupportedAudioFileException, IOException {
+    public Queue<SequencePart> createSequence(int level) throws QueueException, UnsupportedAudioFileException, IOException {
         int index1;
         int index2;
         this.updateSequenceLength(level);
@@ -42,6 +42,7 @@ public class Sequence {
                     (SequencePartColor.instance().getColor(index1)
                             , SequencePartSound.instance().getSound(index2)));
         }
+        return sequence;
     }
 
     public void updateSequenceLength(int level) {

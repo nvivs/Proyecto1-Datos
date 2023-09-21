@@ -1,9 +1,11 @@
 package Proyecto.logic;
 
+import Proyecto.Util.Queue;
 import Proyecto.Util.QueueException;
 import Proyecto.data.Data;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
@@ -25,15 +27,15 @@ public class Service {
         data = new Data();
     }
 
-    public void createSequence() throws UnsupportedAudioFileException, QueueException, IOException {
-        data.getSequence().createSequence(data.getLevel().getLevel());
+    public Queue<SequencePart> createSequence() throws UnsupportedAudioFileException, QueueException, IOException {
+        return data.getSequence().createSequence(data.getLevel().getLevel());
     }
 
     public Sequence getSequence() {
         return data.getSequence();
     }
 
-    public void check(Color color) throws Exception {
+    public void check(ImageIcon color) throws Exception {
         if(data.getSequence().getSequence().head().getColor() == color){//si el color seleccionado coincide con
             data.getSequence().getSequence().dequeue();// la cabeza del queue
         }else {
@@ -44,11 +46,11 @@ public class Service {
         }
     }
 
-    public void increaseLevel(){
-        data.getLevel().increase();
+    public int increaseLevel(){
+        return data.getLevel().increase();
     }
 
-    public void updateScore(int totalTime, int timeSpend){
-        data.getScore().updateScore(totalTime, timeSpend);
+    public int updateScore(int totalTime, int timeSpend){
+        return data.getScore().updateScore(totalTime, timeSpend);
     }
 }
