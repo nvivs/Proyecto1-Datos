@@ -1,21 +1,16 @@
 package Proyecto.MVC;
 
 import Proyecto.Util.QueueException;
-import Proyecto.logic.SequencePartColor;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Timer;
-
 import static java.lang.Thread.sleep;
 
 public class View extends JFrame implements Observer {
@@ -203,7 +198,8 @@ public class View extends JFrame implements Observer {
         }
     }
 
-    public void iniciaBotones(int tam){
+    public void iniciaBotones(int tam) throws UnsupportedAudioFileException, QueueException, IOException {
+        controller.inicia();
         for (int i = 0; i < tam; i++) {
             botones[i].setBorderPainted(false);
             botones[i].setContentAreaFilled(false);
@@ -219,16 +215,16 @@ public class View extends JFrame implements Observer {
     public int reproduceSecuencia() throws InterruptedException {
         this.botones = model.getBotones();
             for(int i = 0; i < model.getBotones().length; i++){
-            botones[i].setIcon(model.getSecuencia().iterator().next().getColor());
-            try(Clip clip = AudioSystem.getClip()){
-                clip.open(model.getSecuencia().iterator().next().getSound());
-                clip.start();
-                //Thread.sleep(clip.getMicrosecondLength() / 1_000);
-            } catch (IOException
-                     //| InterruptedException
-                     | LineUnavailableException ex) {
-                System.err.printf("Excepción: '%s'%n", ex.getMessage());
-            }
+                botones[i].setIcon(model.getSecuencia().iterator().next().getColor());
+//            try(Clip clip = AudioSystem.getClip()){
+//                clip.open(model.getSecuencia().iterator().next().getSound());
+//                clip.start();
+//                //Thread.sleep(clip.getMicrosecondLength() / 1_000);
+//            } catch (IOException
+//                     //| InterruptedException
+//                     | LineUnavailableException ex) {
+//                System.err.printf("Excepción: '%s'%n", ex.getMessage());
+//            }
             if(model.getNivel() == 1) {
                 sleep(5000);
                 tiempoRestante = 30;
@@ -256,13 +252,47 @@ public class View extends JFrame implements Observer {
         return tiempoRestante;
     }
 
+    private void temporizador(){
+        Thread thread = new Thread(() -> {
+            for (int i = tiempoRestante; i >= 0; i++) {
+                tiempo.setText(String.valueOf(i));
+                tiempoTotal = tiempoRestante - i;
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                if (i == 0) {
+                    JOptionPane pane = new JOptionPane();
+                    pane.showMessageDialog(panel, "Te has quedado sin tiempo", "HAZ PERDIDO", JOptionPane.INFORMATION_MESSAGE);
+                    pane.addComponentListener(new ComponentAdapter() {
+                        @Override
+                        public void componentHidden(ComponentEvent e) {
+                            super.componentHidden(e);
+                            try {
+                                controller.fail();
+                            } catch (UnsupportedAudioFileException | QueueException | IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        thread.start();
+    }
+
     @Override
     public void update(Observable o, Object properties) {
         int changedProps = (int) properties;
 
         if((changedProps & Model.BOTONS) == Model.BOTONS){
             botones = model.getBotones();
-            iniciaBotones(botones.length);
+            try {
+                iniciaBotones(botones.length);
+            } catch (UnsupportedAudioFileException | IOException | QueueException e) {
+                throw new RuntimeException(e);
+            }
             for(int i = 0; i < botones.length; i++){
                 if(botones[i] != null){
                     int finalI = i;
@@ -280,33 +310,7 @@ public class View extends JFrame implements Observer {
             try {
                 tiempoRestante = reproduceSecuencia();
                 tiempo.setText(String.valueOf(tiempoRestante));
-                Thread thread = new Thread(() -> {
-                    for (int i = tiempoRestante; i >= 0; i++) {
-                        tiempo.setText(String.valueOf(i));
-                        tiempoTotal = tiempoRestante - i;
-                        try {
-                            sleep(1000);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                        if (i == 0) {
-                            JOptionPane pane = new JOptionPane();
-                            pane.showMessageDialog(panel, "Te has quedado sin tiempo", "HAZ PERDIDO", JOptionPane.INFORMATION_MESSAGE);
-                            pane.addComponentListener(new ComponentAdapter() {
-                                @Override
-                                public void componentHidden(ComponentEvent e) {
-                                    super.componentHidden(e);
-                                    try {
-                                        controller.fail();
-                                    } catch (UnsupportedAudioFileException | QueueException | IOException ex) {
-                                        throw new RuntimeException(ex);
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
-                thread.start();
+                temporizador();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

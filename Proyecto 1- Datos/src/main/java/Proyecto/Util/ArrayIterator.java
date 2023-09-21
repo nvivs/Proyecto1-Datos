@@ -33,12 +33,16 @@ class ArrayIterator<T> implements Iterator<T> {
     @Override
     public T next() {
         T r = null;
-        if (hasNext()) {
+        if(elements[k0] != null){
             r = (T) elements[k0];
+        }
+        if (hasNext()) {
             k0 = (k0 + 1) % elements.length;
         }
         return r;
     }
+
+
 
     private final Object[] elements;
     private int k0;

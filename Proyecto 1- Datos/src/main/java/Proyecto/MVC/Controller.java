@@ -16,12 +16,17 @@ public class Controller {
     View view;
     Model model;
 
-    public Controller(View view, Model model) throws UnsupportedAudioFileException, QueueException, IOException {
+    public Controller(View view, Model model) {
         model.init();
         this.view = view;
         this.model = model;
         view.setController(this);
         view.setModel(model);
+
+    }
+
+    public void inicia() throws UnsupportedAudioFileException, QueueException, IOException {
+        model.iniciaBotones();
         createSequence();
     }
 

@@ -23,7 +23,8 @@ public class Queue<T> implements Iterable<T> {
     }
 
     public boolean isFull() {
-        return !(count() < elements.length - 1);
+        //return !(count() < elements.length - 1);
+        return count() == elements.length;
     }
 
     public int count() {
