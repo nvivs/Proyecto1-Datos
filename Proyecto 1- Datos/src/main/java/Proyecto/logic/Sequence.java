@@ -28,7 +28,7 @@ public class Sequence {
     public Queue<SequencePart> createSequence(int level) throws QueueException, UnsupportedAudioFileException, IOException {
         int index1;
         int index2;
-        this.updateSequenceLength(level);
+        this.updateSequenceLength(level+1);
 
         if(level < 5){
             index1 = new Random().nextInt(4) + 4;

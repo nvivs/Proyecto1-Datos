@@ -217,7 +217,8 @@ public class View extends JFrame implements Observer {
     }
 
     public int reproduceSecuencia() throws InterruptedException {
-        for(int i = 0; i < model.getBotones().length; i++){
+        this.botones = model.getBotones();
+            for(int i = 0; i < model.getBotones().length; i++){
             botones[i].setIcon(model.getSecuencia().iterator().next().getColor());
             try(Clip clip = AudioSystem.getClip()){
                 clip.open(model.getSecuencia().iterator().next().getSound());

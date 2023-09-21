@@ -19,14 +19,14 @@ public class SequencePartSound {
     }
 
     public SequencePartSound() throws UnsupportedAudioFileException, IOException {
-        RED = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass()
-                .getResourceAsStream("Proyecto 1- Datos/src/main/resources/Red.wav")));
+         RED = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass()
+                .getResourceAsStream("/Red.wav")));
         BLUE = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass()
-                .getResourceAsStream("Proyecto 1- Datos/src/main/resources/Blue.wav")));
+                .getResourceAsStream("/Blue.wav")));
         GREEN = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass()
-                .getResourceAsStream("Proyecto 1- Datos/src/main/resources/Green.wav")));
+                .getResourceAsStream("/Green.wav")));
         YELLOW = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass()
-                .getResourceAsStream("Proyecto 1- Datos/src/main/resources/Yellow.wav")));
+                .getResourceAsStream("/Yellow.wav")));
     }
 
     public AudioInputStream getSound(int i) {
