@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class View extends JFrame{
     private JPanel panel;
@@ -11,32 +12,57 @@ public class View extends JFrame{
     private JButton[] botones; // Arreglo de botones a iluminar
         //private int indiceIluminado; // Índice del botón que se ilumina actualmente
         private Timer timer; // Temporizador para la secuencia de iluminación
-        private BotonPersonalizado botoRojo;
-        private BotonPersonalizado botoVerde;
-        private BotonPersonalizado botoAmarillo;
-        private BotonPersonalizado botoAzul;
 
         public View() {
-            botoRojo= new BotonPersonalizado("Proyecto 1- Datos\\src\\main\\resources\\Rojo.png");
-            botoVerde= new BotonPersonalizado("Proyecto 1- Datos\\src\\main\\resources\\Verde.png");
-            botoAzul= new BotonPersonalizado("Proyecto 1- Datos\\src\\main\\resources\\Azul.png");
-            botoAmarillo= new BotonPersonalizado("Proyecto 1- Datos\\src\\main\\resources\\Amarillo.png");
+
+            botones = new JButton[4];
+            for (int i = 0; i < 4; i++) {
+                botones[i] = new JButton();
+            }
+            botones[0].setIcon(new ImageIcon("Proyecto 1- Datos/src/main/resources/rojo.png"));
+            botones[1].setIcon(new ImageIcon("Proyecto 1- Datos/src/main/resources/verde.png"));
+            botones[2].setIcon(new ImageIcon("Proyecto 1- Datos/src/main/resources/amarillo.png"));
+            botones[3].setIcon(new ImageIcon("Proyecto 1- Datos/src/main/resources/azul.png"));
+            for (int i = 0; i < 4; i++) {
+                botones[i].setBorderPainted(false);
+                botones[i].setContentAreaFilled(false);
+            }
+
             setLayout(null);
-            botoRojo.setBackground(Color.BLACK);
-            botoRojo.setBorderPainted(false);
-            botoRojo.setContentAreaFilled(false);
-            botoRojo.setBounds(20,30,500,600);
-            botoVerde.setBounds(210,30,500,600);
-            botoAmarillo.setBounds(20,225,500,600);
-            botoAzul.setBounds(210,225,500,600);
-            getContentPane().add(botoRojo);
-            getContentPane().add(botoVerde);
-            getContentPane().add(botoAmarillo);
-            getContentPane().add(botoAzul);
-            botoRojo.addActionListener(new ActionListener() {
+            botones[0].setBounds(20, 30, 500, 600);
+            botones[1].setBounds(210, 30, 500, 600);
+            botones[2].setBounds(20, 225, 500, 600);
+            botones[3].setBounds(210, 225, 500, 600);
+
+            for (int i = 0; i < 4; i++) {
+                getContentPane().add(botones[i]);
+            }
+
+            botones[0].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("Se clickeo el boton rojo");
+                }
+            });
+
+            botones[1].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Se clickeo el boton verde");
+                }
+            });
+
+            botones[2].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Se clickeo el boton azul");
+                }
+            });
+
+            botones[3].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Se clickeo el boton amarillo");
                 }
             });
 
@@ -57,57 +83,48 @@ public class View extends JFrame{
             // add(botones[i]);
             // }
 
-            int x=0;
-            // Inicializa el temporizador con un retraso de 1 segundo
-            timer = new Timer(1000, new ActionListener() {
-                private int indiceIluminado = 0; // Inicializa el índice aquí
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Verifica si hemos iluminado todos los botones
-                    if (indiceIluminado < 4) {
-                        // Configura el botón actual según el índice iluminado
-                        switch (indiceIluminado) {
-                            case 0:
-                                ImageIcon img = new ImageIcon("Proyecto 1- Datos\\src\\main\\resources\\rojoiluminado.png");
-                                botoRojo.setIcon(img);
-                                break;
-                            case 1:
-                                ImageIcon img2 = new ImageIcon("Proyecto 1- Datos\\src\\main\\resources\\verdeiluminado.png");
-                                botoVerde.setIcon(img2);
-                                break;
-                            case 2:
-                                ImageIcon img3 = new ImageIcon("Proyecto 1- Datos\\src\\main\\resources\\amarilloiluminado.png");
-                                botoAmarillo.setIcon(img3);
-                                break;
-                            case 3:
-                                ImageIcon img4 = new ImageIcon("Proyecto 1- Datos\\src\\main\\resources\\azuliluminado.png");
-                                botoAzul.setIcon(img4);
-                                break;
-                        }
-
-                        // Incrementa el índice iluminado
-                        indiceIluminado++;
-                    } else {
-                        // Cuando se completa la secuencia, detén el temporizador
-                        ((Timer) e.getSource()).stop();
-                    }
-                }
-            });
+//            int x=0;
+//            // Inicializa el temporizador con un retraso de 1 segundo
+//            timer = new Timer(1000, new ActionListener() {
+//                private int indiceIluminado = 0; // Inicializa el índice aquí
+//
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    // Verifica si hemos iluminado todos los botones
+//                    if (indiceIluminado < 4) {
+//                        // Configura el botón actual según el índice iluminado
+//                        switch (indiceIluminado) {
+//                            case 0:
+//                                ImageIcon img = new ImageIcon("Proyecto 1- Datos/src/main/resources/rojoClaro.png");
+//                                botoRojo.setIcon(img);
+//                                break;
+//                            case 1:
+//                                ImageIcon img2 = new ImageIcon("Proyecto 1- Datos/src/main/resources/verdeClaro.png");
+//                                botoVerde.setIcon(img2);
+//                                break;
+//                            case 2:
+//                                ImageIcon img3 = new ImageIcon("Proyecto 1- Datos/src/main/resources/amarilloClaro.png");
+//                                botoAmarillo.setIcon(img3);
+//                                break;
+//                            case 3:
+//                                ImageIcon img4 = new ImageIcon("Proyecto 1- Datos/src/main/resources/azulClaro.png");
+//                                botoAzul.setIcon(img4);
+//                                break;
+//                        }
+//
+//                        // Incrementa el índice iluminado
+//                        indiceIluminado++;
+//                    } else {
+//                        // Cuando se completa la secuencia, detén el temporizador
+//                        ((Timer) e.getSource()).stop();
+//                    }
+//                }
+//            });
+//        }
+//        public void iniciarSecuencia() {
+//            // Iniciar la secuencia de iluminación
+//            // indiceIluminado = 0;
+//            timer.start();
+//        }
         }
-        public void iniciarSecuencia() {
-            // Iniciar la secuencia de iluminación
-            // indiceIluminado = 0;
-            timer.start();
-        }
-
-    public static class BotonPersonalizado extends JButton {
-        public BotonPersonalizado(String imagePath) {
-            // Cargar una imagen personalizada para el botón
-            ImageIcon imageIcon = new ImageIcon(imagePath);
-            setIcon(imageIcon);
-            setBorderPainted(false);
-            setContentAreaFilled(false);
-        }
-    }
 }

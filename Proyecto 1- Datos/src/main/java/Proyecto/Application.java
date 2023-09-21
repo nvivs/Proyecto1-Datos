@@ -10,7 +10,7 @@ public class Application {
         window.setContentPane(new JTabbedPane());
         View simulador1 = new View();
         simulador1.setVisible(true);
-        simulador1.iniciarSecuencia();
+        //simulador1.iniciarSecuencia();
     }
 
     public static JFrame window;
