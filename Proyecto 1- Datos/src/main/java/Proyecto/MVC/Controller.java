@@ -52,7 +52,6 @@ public class Controller {
         model.setNivel(Service.instance().increaseLevel());
         model.setScore(Service.instance().updateScore(totalTime, timeSpend));
         model.format(colors, x);
-        model.commit();
     }
 
     public void newLevel(JButton[] botones){

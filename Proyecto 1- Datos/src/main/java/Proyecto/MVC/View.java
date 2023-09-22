@@ -260,7 +260,17 @@ public class View extends JFrame implements Observer {
             controller.check(color);
         } catch (QueueException ex) {// si ganó
             JOptionPane.showMessageDialog(panel, "Haz completado la secuencia correctamente", "HAZ GANADO", JOptionPane.INFORMATION_MESSAGE);
-            controller.win(tiempoTotal, tiempoRestante);
+            int x = 0;
+            if(model.getNivel() <= 5) {// 4 colores
+                x = 4;
+            }else if(model.getNivel() <= 10){// 5 colores
+                x = 5;
+            }else if(model.getNivel() <= 15){// 6 colores
+                x = 6;
+            }else if(model.getNivel() > 15){// 7 colores
+                x = 7;
+            }
+            controller.win(tiempoTotal, tiempoRestante, x, COLORS);
         }
         catch (RuntimeException ex){// si perdió
             JOptionPane pane = new JOptionPane();
