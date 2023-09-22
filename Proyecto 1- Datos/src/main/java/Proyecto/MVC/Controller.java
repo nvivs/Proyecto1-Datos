@@ -14,11 +14,12 @@ public class Controller {
     Model model;
 
     public Controller(View view, Model model, Color[] colors) {
-        model.init(colors);
+        model.init();
         this.view = view;
         this.model = model;
         view.setController(this);
         view.setModel(model);
+        model.format(colors, 4);
     }
 
     public JPanel format(Color[] colors, int i){
@@ -42,13 +43,15 @@ public class Controller {
     }
 
     public void fail(Color[] colors) throws UnsupportedAudioFileException, QueueException, IOException {
-        model.init(colors);
+        model.init();
+        format(colors, 4);
         createSequence();
     }
 
-    public void win(int totalTime, int timeSpend){
+    public void win(int totalTime, int timeSpend, int x, Color[] colors){
         model.setNivel(Service.instance().increaseLevel());
         model.setScore(Service.instance().updateScore(totalTime, timeSpend));
+        model.format(colors, x);
         model.commit();
     }
 

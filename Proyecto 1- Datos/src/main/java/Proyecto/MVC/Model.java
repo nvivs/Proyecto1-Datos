@@ -36,8 +36,8 @@ public class Model extends java.util.Observable{
     public Model() {
     }
 
-    public void init(Color[] colors){
-        mainPanel = format(colors, 4);
+    public void init(){
+        mainPanel = new JPanel();
         secuencia = new Queue<>();
         nivel = 1;
         score = 0;
