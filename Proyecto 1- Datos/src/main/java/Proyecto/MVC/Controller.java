@@ -1,10 +1,7 @@
 package Proyecto.MVC;
 
 
-import Proyecto.Util.Queue;
 import Proyecto.Util.QueueException;
-import Proyecto.logic.Sequence;
-import Proyecto.logic.SequencePart;
 import Proyecto.logic.Service;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -16,18 +13,16 @@ public class Controller {
     View view;
     Model model;
 
-    public Controller(View view, Model model) {
-        model.init();
+    public Controller(View view, Model model, Color[] colors) {
+        model.init(colors);
         this.view = view;
         this.model = model;
         view.setController(this);
         view.setModel(model);
-
     }
 
-    public void inicia() throws UnsupportedAudioFileException, QueueException, IOException {
-        model.iniciaBotones();
-        createSequence();
+    public JPanel format(Color[] colors, int i){
+        return model.format(colors, i);
     }
 
     public void createSequence() throws UnsupportedAudioFileException, QueueException, IOException {
@@ -35,7 +30,7 @@ public class Controller {
         model.commit();
     }
 
-    public void check(ImageIcon color) throws QueueException, UnsupportedAudioFileException, IOException {
+    public void check(Color color) throws QueueException, UnsupportedAudioFileException, IOException {
         try {
             Service.instance().check(color);
         }catch (QueueException e){// llego al final (acertó)
@@ -46,8 +41,8 @@ public class Controller {
         }
     }
 
-    public void fail() throws UnsupportedAudioFileException, QueueException, IOException {
-        model.init();
+    public void fail(Color[] colors) throws UnsupportedAudioFileException, QueueException, IOException {
+        model.init(colors);
         createSequence();
     }
 

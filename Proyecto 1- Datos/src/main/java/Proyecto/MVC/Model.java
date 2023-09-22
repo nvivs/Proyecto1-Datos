@@ -3,24 +3,23 @@ package Proyecto.MVC;
 import Proyecto.logic.SequencePart;
 
 import javax.swing.*;
-import java.util.List;
+import java.awt.*;
 import java.util.Observer;
 import Proyecto.Util.Queue;
-import Proyecto.logic.SequencePartColor;
 
 public class Model extends java.util.Observable{
 
-    JButton[] botones;
     Queue<SequencePart> secuencia;
+    JPanel mainPanel;
     int nivel;
     int changedProps = NONE;
     int score;
 
     public static int NONE = 0;
     public static int SEQUENCE = 1;
-    public static int BOTONS = 2;
-    public static int LEVEL = 4;
-    public static int SCORE = 8;
+    public static int LEVEL = 2;
+    public static int SCORE = 4;
+    public static int PANEL = 8;
 
     @Override
     public synchronized void addObserver(Observer o) {
@@ -37,34 +36,67 @@ public class Model extends java.util.Observable{
     public Model() {
     }
 
-    public void init(){
-        botones = new JButton[4];
-        for(int i = 0; i < 4; i++){
-            botones[i] = new JButton();
-        }
-
-        this.secuencia = null;
-        this.nivel = 1;
-        this.score = 0;
-        changedProps = NONE;
+    public void init(Color[] colors){
+        mainPanel = format(colors, 4);
+        secuencia = new Queue<>();
+        nivel = 1;
+        score = 0;
     }
 
-    public void iniciaBotones(){
-        botones[0].setIcon(SequencePartColor.instance().getRED());
-        botones[1].setIcon(SequencePartColor.instance().getGREEN());
-        botones[2].setIcon(SequencePartColor.instance().getYELLOW());
-        botones[3].setIcon(SequencePartColor.instance().getBLUE());
-        setBotones(botones);
+    public JPanel format(Color[] COLORS, int i){
+        mainPanel = new JPanel() {
+            @Override
+            public void paintComponent(Graphics bg) {
+                super.paintComponent(bg);
+                Graphics2D g = (Graphics2D) bg;
+                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+
+                int cx = getWidth() / 2;
+                int cy = getHeight() / 2;
+                g.setColor(Color.WHITE);
+                g.drawLine(cx, 0, cx, getHeight());
+                g.drawLine(0, cy, getWidth(), cy);
+
+                int s = (int) (0.80 * Math.min(getWidth(), getHeight()));
+
+                int n = i;
+                for (int i = 0; i < n; i++) {
+                    drawWedge(g, cx, cy, s, (i * 360 - 180) / n, 360 / n, COLORS[i]);
+                }
+
+                g.setColor(Color.DARK_GRAY);
+                g.fillOval(cx - s / 6, cy - s / 6, s / 3, s / 3);
+            }
+
+            private void drawWedge(Graphics2D g, int cx, int cy, int s, int start, int end, Color c) {
+
+                double r = Math.PI / 180.0;
+                int x0 = (int) (cx + s * 0.5 * Math.cos(-start * r));
+                int y0 = (int) (cy + s * 0.5 * Math.sin(-start * r));
+                int x1 = (int) (cx + s * 0.5 * Math.cos(-(start + end) * r));
+                int y1 = (int) (cy + s * 0.5 * Math.sin(-(start + end) * r));
+
+                g.setColor(c);
+                g.fillArc(cx - s / 2, cy - s / 2, s, s, start, end);
+
+                g.setColor(Color.DARK_GRAY);
+                g.setStroke(new BasicStroke(16f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
+                g.drawLine(cx, cy, x0, y0);
+                g.drawLine(cx, cy, x1, y1);
+                g.drawArc(cx - s / 2, cy - s / 2, s, s, start, end);
+            }
+
+        };
+
+        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+        mainPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        setMainPanel(mainPanel);
         commit();
-    }
 
-    public JButton[] getBotones() {
-        return botones;
-    }
-
-    public void setBotones(JButton[] botones) {
-        this.botones = botones;
-        changedProps += BOTONS;
+        return mainPanel;
     }
 
     public Queue<SequencePart> getSecuencia() {
@@ -91,5 +123,15 @@ public class Model extends java.util.Observable{
 
     public void setScore(int score) {
         this.score = score;
+        changedProps += SCORE;
+    }
+
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+
+    public void setMainPanel(JPanel mainPanel) {
+        this.mainPanel = mainPanel;
+        changedProps += PANEL;
     }
 }

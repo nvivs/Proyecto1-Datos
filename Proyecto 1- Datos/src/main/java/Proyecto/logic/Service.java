@@ -35,7 +35,7 @@ public class Service {
         return data.getSequence();
     }
 
-    public void check(ImageIcon color) throws Exception {
+    public void check(Color color) throws Exception {
         if(data.getSequence().getSequence().head().getColor() == color){//si el color seleccionado coincide con
             data.getSequence().getSequence().dequeue();// la cabeza del queue
         }else {

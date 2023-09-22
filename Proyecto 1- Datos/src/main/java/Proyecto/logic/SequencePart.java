@@ -5,10 +5,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SequencePart {
-    private ImageIcon color;
+    private Color color;
     private AudioInputStream sound;
 
-    public SequencePart(ImageIcon color, AudioInputStream sound) {
+    public SequencePart(Color color, AudioInputStream sound) {
         this.color = color;
         this.sound = sound;
     }
@@ -17,11 +17,11 @@ public class SequencePart {
         new SequencePart(null, null);
     }
 
-    public ImageIcon getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(ImageIcon color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 

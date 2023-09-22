@@ -4,10 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SequencePartColor {
-    private final ImageIcon RED;
-    private final ImageIcon BLUE;
-    private final ImageIcon GREEN;
-    private final ImageIcon YELLOW;
+    private final Color RED;
+    private final Color BLUE;
+    private final Color GREEN;
+    private final Color YELLOW;
+    private final Color ORANGE;
+    private final Color PINK;
+    private final Color WHITE;
     private static SequencePartColor instance;
 
     public static SequencePartColor instance(){
@@ -16,35 +19,53 @@ public class SequencePartColor {
     }
 
     public SequencePartColor() {
-        RED = new ImageIcon("Proyecto 1- Datos/src/main/resources/rojo.png");
-        BLUE = new ImageIcon("Proyecto 1- Datos/src/main/resources/azul.png");
-        GREEN = new ImageIcon("Proyecto 1- Datos/src/main/resources/verde.png");
-        YELLOW = new ImageIcon("Proyecto 1- Datos/src/main/resources/amarillo.png");
+        RED = new Color(103, 21, 21, 255);
+        BLUE = new Color(16, 26, 82, 255);
+        GREEN = new Color(30, 63, 15, 255);
+        YELLOW = new Color(119, 89, 36, 255);
+        ORANGE = new Color(119, 65, 36, 255);
+        PINK = new Color(107, 31, 89, 255);
+        WHITE = new Color(129, 129, 129, 255);
     }
 
-    public ImageIcon getColor(int i){
+    public Color getColor(int i){
         return switch (i) {
             case 1 -> RED;
             case 2 -> BLUE;
             case 3 -> GREEN;
             case 4 -> YELLOW;
+            case 5 -> ORANGE;
+            case 6 -> PINK;
+            case 7 -> WHITE;
             default -> null;
         };
     }
 
-    public ImageIcon getRED() {
+    public Color getRED() {
         return RED;
     }
 
-    public ImageIcon getBLUE() {
+    public Color getBLUE() {
         return BLUE;
     }
 
-    public ImageIcon getGREEN() {
+    public Color getGREEN() {
         return GREEN;
     }
 
-    public ImageIcon getYELLOW() {
+    public Color getYELLOW() {
         return YELLOW;
+    }
+
+    public Color getORANGE() {
+        return ORANGE;
+    }
+
+    public Color getPINK() {
+        return PINK;
+    }
+
+    public Color getWHITE() {
+        return WHITE;
     }
 }

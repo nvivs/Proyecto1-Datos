@@ -19,12 +19,13 @@ public class Application {
         View view = new View();
         controller = new Controller(view, model);
 
-        window.setVisible(true);
+        window.getContentPane().add("Simon dice", view.getPanel());
         window.setTitle("Simon Dice");
-        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(503, 530);
-        window.setResizable(false);
+        window.setResizable(true);
         window.setLayout(new GridLayout(2, 2));
+        window.setVisible(true);
     }
 
     public static JFrame window;
