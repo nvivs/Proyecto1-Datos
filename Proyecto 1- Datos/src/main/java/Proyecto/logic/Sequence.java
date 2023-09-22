@@ -8,6 +8,7 @@ import java.util.Random;
 
 public class Sequence {
     private Queue<SequencePart> sequence;
+    private int index;
 
     public Sequence(Queue<SequencePart> sequence) {
         this.sequence = sequence;
@@ -25,24 +26,43 @@ public class Sequence {
         this.sequence = sequence;
     }
 
-    public Queue<SequencePart> createSequence(int level) throws QueueException, UnsupportedAudioFileException, IOException {
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public Sequence createSequence(int level) throws QueueException, UnsupportedAudioFileException, IOException {
         int index1;
         int index2;
         this.updateSequenceLength(level + 1);
+        int x = 0;
+        if(level <= 5) {// 4 colores
+            x = 4;
+        }else if(level <= 10){// 5 colores
+            x = 5;
+        }else if(level <= 15){// 6 colores
+            x = 6;
+        }else if(level > 15){// 7 colores
+            x = 7;
+        }
 
         if(level < 5){
-            index1 = new Random().nextInt(4) + 4;
+            index1 = new Random().nextInt(x + 1);
             index2 = index1;
         }else{
-            index1 = new Random().nextInt(4) + 4;
-            index2 = new Random().nextInt(4) + 4;
+            index1 = new Random().nextInt(x + 1);
+            index2 = new Random().nextInt(x + 1);
         }
         for(int i = 0; i < level; i++) {
             sequence.enqueue(new SequencePart
                     (SequencePartColor.instance().getColor(index1)
                             , SequencePartSound.instance().getSound(index2)));
         }
-        return sequence;
+        index = index1;
+        return this;
     }
 
     public void updateSequenceLength(int level) {

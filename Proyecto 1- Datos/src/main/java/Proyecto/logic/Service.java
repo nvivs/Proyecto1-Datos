@@ -27,7 +27,7 @@ public class Service {
         data = new Data();
     }
 
-    public Queue<SequencePart> createSequence() throws UnsupportedAudioFileException, QueueException, IOException {
+    public Sequence createSequence() throws UnsupportedAudioFileException, QueueException, IOException {
         return data.getSequence().createSequence(data.getLevel().getLevel());
     }
 

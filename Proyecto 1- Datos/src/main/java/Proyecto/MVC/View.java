@@ -24,18 +24,13 @@ public class View extends JFrame implements Observer {
     private JLabel Nivel;
     private JLabel Puntuacion;
     private JLabel Tiempo;
+    private JLabel nivelLbl;
+    private JLabel puntuacionLbl;
+    private JLabel tiempoLbl;
 
     public View() {
 
-        COLORS = new Color[]{
-                new Color(255, 0, 0),
-                new Color(33, 255, 0),
-                new Color(255, 243, 0),
-                new Color(0, 42, 255),
-                new Color(255, 136, 0),
-                new Color(223, 0, 255),
-                new Color(0, 245, 255, 255)
-        };
+        initColors();
 
         panel = new JPanel();
         panel.setFocusable(true);
@@ -94,22 +89,19 @@ public class View extends JFrame implements Observer {
         return panel;
     }
 
-    public int reproduceSecuencia() throws InterruptedException {
-        int x = 0;
-        if(model.getNivel() <= 5) {// 4 colores
-            x = 4;
-        }else if(model.getNivel() <= 10){// 5 colores
-            x = 5;
-        }else if(model.getNivel() <= 15){// 6 colores
-            x = 6;
-        }else if(model.getNivel() > 15){// 7 colores
-            x = 7;
-        }
-        Color[] colores = COLORS;
+    public void initColors(){
+        COLORS = new Color[]{
+                new Color(255, 0, 0),
+                new Color(33, 255, 0),
+                new Color(255, 243, 0),
+                new Color(0, 42, 255),
+                new Color(255, 136, 0),
+                new Color(223, 0, 255),
+                new Color(0, 245, 255, 255)
+        };
+    }
 
-        for(int i = 0; i < model.getSecuencia().count(); i++){
-            colores[i] = model.getSecuencia().iterator().next().getColor();
-            panel = controller.format(colores, x);
+    public int setTiempoRestante(){
 //            try(Clip clip = AudioSystem.getClip()){
 //                clip.open(model.getSecuencia().iterator().next().getSound());
 //                clip.start();
@@ -119,31 +111,40 @@ public class View extends JFrame implements Observer {
 //                     | LineUnavailableException ex) {
 //                System.err.printf("Excepción: '%s'%n", ex.getMessage());
 //            }
-            if(model.getNivel() == 1) {
-                sleep(5000);
-                tiempoRestante = 30;
-            }else if(model.getNivel() <= 4){
-                sleep(4000);
-                tiempoRestante = 25;
-            }else if(model.getNivel() <= 7){
-                sleep(3000);
-                tiempoRestante = 20;
-            }else if(model.getNivel() <= 10){
-                sleep(2000);
-                tiempoRestante = 15;
-            }else if(model.getNivel() <= 13){
-                sleep(1000);
-                tiempoRestante = 10;
-            }else if(model.getNivel() <= 15){
-                sleep(500);
-                tiempoRestante = 5;
-            }else if(model.getNivel() > 15){
-                sleep(100);
-                tiempoRestante = 2;
-            }
-            panel = controller.format(COLORS, x);
+        if (model.getNivel() == 1) {
+            tiempoRestante = 30;
+        } else if (model.getNivel() <= 4) {
+            tiempoRestante = 25;
+        } else if (model.getNivel() <= 7) {
+            tiempoRestante = 20;
+        } else if (model.getNivel() <= 10) {
+            tiempoRestante = 15;
+        } else if (model.getNivel() <= 13) {
+            tiempoRestante = 10;
+        } else if (model.getNivel() <= 15) {
+            tiempoRestante = 5;
+        } else if (model.getNivel() > 15) {
+            tiempoRestante = 2;
         }
         return tiempoRestante;
+    }
+
+    public void espera() throws InterruptedException {
+        if (model.getNivel() == 1) {
+            sleep(5000);
+        } else if (model.getNivel() <= 4) {
+            sleep(4000);
+        } else if (model.getNivel() <= 7) {
+            sleep(3000);
+        } else if (model.getNivel() <= 10) {
+            sleep(2000);
+        } else if (model.getNivel() <= 13) {
+            sleep(1000);
+        } else if (model.getNivel() <= 15) {
+            sleep(500);
+        } else if (model.getNivel() > 15) {
+            sleep(100);
+        }
     }
 
     private void temporizador(){
@@ -182,18 +183,69 @@ public class View extends JFrame implements Observer {
 
         if((changedProps & Model.PANEL) == Model.PANEL){
             panel = setupComponents(getContentPane());
-            model.setMainPanel(panel);
-            model.commit();
+//            panel.add(Tiempo);
+//            panel.add(Puntuacion);
+//            panel.add(Nivel);
+//            panel.add(tiempoLbl);
+//            panel.add(puntuacionLbl);
+//            panel.add(nivelLbl);
+        }
+
+        if((changedProps & Model.SEQUENCEREPRODUCED) == Model.SEQUENCEREPRODUCED){
+            if(model.getSequenceIndex() > 0){
+                int x = 0;
+                if(model.getNivel() <= 5) {// 4 colores
+                    x = 4;
+                }else if(model.getNivel() <= 10){// 5 colores
+                    x = 5;
+                }else if(model.getNivel() <= 15){// 6 colores
+                    x = 6;
+                }else if(model.getNivel() > 15){// 7 colores
+                    x = 7;
+                }
+                Color[] colores = COLORS;
+
+                colores[model.getSecuencia().getIndex()] = model.getSecuencia().getSequence().iterator().next().getColor();
+                panel = controller.format(colores, x);
+
+                try {
+                   espera();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                model.setSequenceIndex(model.getSequenceIndex() - 1);
+                model.changedProps = Model.RESTART;
+                model.commit();
+//                model.changedProps = Model.SEQUENCEREPRODUCED;
+//                model.commit();
+            }else {
+                model.changedProps = Model.NONE;
+                tiempoRestante = setTiempoRestante();
+                Tiempo.setText(String.valueOf(tiempoRestante));
+                temporizador();
+            }
+        }
+
+        if((changedProps & Model.RESTART) == Model.RESTART){
+            int x = 0;
+            if(model.getNivel() <= 5) {// 4 colores
+                x = 4;
+            }else if(model.getNivel() <= 10){// 5 colores
+                x = 5;
+            }else if(model.getNivel() <= 15){// 6 colores
+                x = 6;
+            }else if(model.getNivel() > 15){// 7 colores
+                x = 7;
+            }
+            initColors();
+            panel = controller.format(COLORS, x);
+            model.changedProps = Model.SEQUENCEREPRODUCED;
         }
 
         if((changedProps & Model.SEQUENCE) == Model.SEQUENCE){
-            try {
-                tiempoRestante = reproduceSecuencia();
-                Tiempo.setText(String.valueOf(tiempoRestante));
-                temporizador();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            model.changedProps = Model.SEQUENCEREPRODUCED;
+            //model.commit();
         }
 
         if((changedProps & Model.LEVEL) == Model.LEVEL){

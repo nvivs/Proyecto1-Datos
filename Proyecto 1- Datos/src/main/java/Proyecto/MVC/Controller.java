@@ -18,9 +18,10 @@ public class Controller {
         this.view = view;
         this.model = model;
         view.setController(this);
-        view.setModel(model);
         model.format(colors, 4);
+        model.changedProps += Model.PANEL;
         createSequence();
+        view.setModel(model);
     }
 
     public JPanel format(Color[] colors, int i){
@@ -29,7 +30,7 @@ public class Controller {
 
     public void createSequence() throws UnsupportedAudioFileException, QueueException, IOException {
         model.setSecuencia(Service.instance().createSequence());
-        model.commit();
+        model.setSequenceIndex(Service.instance().createSequence().getSequence().count());
     }
 
     public void check(Color color) throws QueueException, UnsupportedAudioFileException, IOException {

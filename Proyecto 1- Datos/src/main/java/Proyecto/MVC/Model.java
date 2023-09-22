@@ -1,5 +1,6 @@
 package Proyecto.MVC;
 
+import Proyecto.logic.Sequence;
 import Proyecto.logic.SequencePart;
 
 import javax.swing.*;
@@ -9,17 +10,20 @@ import Proyecto.Util.Queue;
 
 public class Model extends java.util.Observable{
 
-    Queue<SequencePart> secuencia;
+    Sequence secuencia;
     JPanel mainPanel;
     int nivel;
     int changedProps = NONE;
     int score;
+    int sequenceIndex;
 
     public static int NONE = 0;
     public static int SEQUENCE = 1;
     public static int LEVEL = 2;
     public static int SCORE = 4;
     public static int PANEL = 8;
+    public static int SEQUENCEREPRODUCED = 16;
+    public static int RESTART = 32;
 
     @Override
     public synchronized void addObserver(Observer o) {
@@ -38,9 +42,10 @@ public class Model extends java.util.Observable{
 
     public void init(){
         mainPanel = new JPanel();
-        secuencia = new Queue<>();
+        secuencia = new Sequence();
         nivel = 1;
         score = 0;
+        sequenceIndex = 0;
     }
 
     public JPanel format(Color[] COLORS, int i){
@@ -86,7 +91,6 @@ public class Model extends java.util.Observable{
                 g.drawLine(cx, cy, x1, y1);
                 g.drawArc(cx - s / 2, cy - s / 2, s, s, start, end);
             }
-
         };
 
         mainPanel.setBackground(Color.WHITE);
@@ -96,13 +100,21 @@ public class Model extends java.util.Observable{
         return mainPanel;
     }
 
-    public Queue<SequencePart> getSecuencia() {
+    public Sequence getSecuencia() {
         return secuencia;
     }
 
-    public void setSecuencia(Queue<SequencePart> secuencia) {
+    public void setSecuencia(Sequence secuencia) {
         this.secuencia = secuencia;
         changedProps += SEQUENCE;
+    }
+
+    public int getSequenceIndex() {
+        return sequenceIndex;
+    }
+
+    public void setSequenceIndex(int sequenceIndex) {
+        this.sequenceIndex = sequenceIndex;
     }
 
     public int getNivel() {

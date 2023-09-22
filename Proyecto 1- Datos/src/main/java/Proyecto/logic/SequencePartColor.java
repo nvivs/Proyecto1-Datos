@@ -18,24 +18,24 @@ public class SequencePartColor {
     }
 
     public SequencePartColor() {
-        RED = new Color(103, 21, 21, 255);
+        RED = new Color(148, 33, 33, 255);
         BLUE = new Color(16, 26, 82, 255);
         GREEN = new Color(30, 63, 15, 255);
         YELLOW = new Color(119, 89, 36, 255);
-        ORANGE = new Color(119, 65, 36, 255);
-        PINK = new Color(107, 31, 89, 255);
+        ORANGE = new Color(148, 80, 42, 255);
+        PINK = new Color(140, 26, 113, 255);
         LIGTHBLUE = new Color(2, 92, 98, 255);
     }
 
     public Color getColor(int i){
         return switch (i) {
-            case 1 -> RED;
-            case 2 -> BLUE;
-            case 3 -> GREEN;
-            case 4 -> YELLOW;
-            case 5 -> ORANGE;
-            case 6 -> PINK;
-            case 7 -> LIGTHBLUE;
+            case 0 -> RED;
+            case 1 -> GREEN;
+            case 2 -> YELLOW;
+            case 3 -> BLUE;
+            case 4 -> ORANGE;
+            case 5 -> PINK;
+            case 6 -> LIGTHBLUE;
             default -> null;
         };
     }

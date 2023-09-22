@@ -36,7 +36,7 @@ public class Application {
 
                 for (int i = 0; i < view.COLORS.length; i++) {
                     if (colorEnPosicion.equals(view.COLORS[i])) {
-                        System.out.println("Boton");
+                        System.out.println(view.COLORS[i]);
                        //view.check(view.COLORS[i]);
                     }
                 }
