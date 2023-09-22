@@ -32,12 +32,12 @@ public class Application {
                 super.mouseClicked(e);
                 int x = e.getX();
                 int y = e.getY();
-                System.out.println("Boton");
                 Color colorEnPosicion = view.obtenerColorEnPosicion(x, y);
 
                 for (int i = 0; i < view.COLORS.length; i++) {
                     if (colorEnPosicion.equals(view.COLORS[i])) {
-                       // view.check(view.COLORS[i]);
+                        System.out.println("Boton");
+                       //view.check(view.COLORS[i]);
                     }
                 }
             }

@@ -1,6 +1,5 @@
 package Proyecto.logic;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class SequencePartColor {
@@ -10,7 +9,7 @@ public class SequencePartColor {
     private final Color YELLOW;
     private final Color ORANGE;
     private final Color PINK;
-    private final Color WHITE;
+    private final Color LIGTHBLUE;
     private static SequencePartColor instance;
 
     public static SequencePartColor instance(){
@@ -25,7 +24,7 @@ public class SequencePartColor {
         YELLOW = new Color(119, 89, 36, 255);
         ORANGE = new Color(119, 65, 36, 255);
         PINK = new Color(107, 31, 89, 255);
-        WHITE = new Color(129, 129, 129, 255);
+        LIGTHBLUE = new Color(2, 92, 98, 255);
     }
 
     public Color getColor(int i){
@@ -36,7 +35,7 @@ public class SequencePartColor {
             case 4 -> YELLOW;
             case 5 -> ORANGE;
             case 6 -> PINK;
-            case 7 -> WHITE;
+            case 7 -> LIGTHBLUE;
             default -> null;
         };
     }
@@ -65,7 +64,7 @@ public class SequencePartColor {
         return PINK;
     }
 
-    public Color getWHITE() {
-        return WHITE;
+    public Color getLIGTHBLUE() {
+        return LIGTHBLUE;
     }
 }

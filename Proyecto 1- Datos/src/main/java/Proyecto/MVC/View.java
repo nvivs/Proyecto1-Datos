@@ -14,9 +14,6 @@ import static java.lang.Thread.sleep;
 
 public class View extends JFrame implements Observer {
     private JPanel panel;
-    private JLabel Puntuación;
-    private JLabel tiempo;
-    private JLabel nivel;
     private JButton[] botones;
     int tiempoRestante;
     int tiempoTotal;
@@ -24,6 +21,9 @@ public class View extends JFrame implements Observer {
     private JMenuItem quitItem;
     private JMenuBar mainMenu;
     public Color[] COLORS;
+    private JLabel Nivel;
+    private JLabel Puntuacion;
+    private JLabel Tiempo;
 
     public View() {
 
@@ -34,29 +34,15 @@ public class View extends JFrame implements Observer {
                 new Color(0, 42, 255),
                 new Color(255, 136, 0),
                 new Color(223, 0, 255),
-                new Color(255, 255, 255)
+                new Color(0, 245, 255, 255)
         };
 
         panel = new JPanel();
         panel.setFocusable(true);
         panel.setFocusTraversalKeysEnabled(false);
-
-        panel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                int x = e.getX();
-                int y = e.getY();
-                System.out.println("Boton");
-                Color colorEnPosicion = obtenerColorEnPosicion(x, y);
-
-                for (int i = 0; i < COLORS.length; i++) {
-                    if (colorEnPosicion.equals(COLORS[i])) {
-                        check(COLORS[i]);
-                    }
-                }
-            }
-        });
+        Tiempo.setVisible(true);
+        Nivel.setVisible(true);
+        Puntuacion.setVisible(true);
     }
 
     public Color obtenerColorEnPosicion(int x, int y){
@@ -123,7 +109,7 @@ public class View extends JFrame implements Observer {
 
         for(int i = 0; i < model.getSecuencia().count(); i++){
             colores[i] = model.getSecuencia().iterator().next().getColor();
-            controller.format(colores, x);
+            panel = controller.format(colores, x);
 //            try(Clip clip = AudioSystem.getClip()){
 //                clip.open(model.getSecuencia().iterator().next().getSound());
 //                clip.start();
@@ -155,7 +141,7 @@ public class View extends JFrame implements Observer {
                 sleep(100);
                 tiempoRestante = 2;
             }
-            controller.format(COLORS, x);
+            panel = controller.format(COLORS, x);
         }
         return tiempoRestante;
     }
@@ -163,7 +149,7 @@ public class View extends JFrame implements Observer {
     private void temporizador(){
         Thread thread = new Thread(() -> {
             for (int i = tiempoRestante; i >= 0; i--) {
-                tiempo.setText(String.valueOf(i));
+                Tiempo.setText(String.valueOf(i));
                 tiempoTotal = tiempoRestante - i;
                 try {
                     sleep(1000);
@@ -195,13 +181,15 @@ public class View extends JFrame implements Observer {
         int changedProps = (int) properties;
 
         if((changedProps & Model.PANEL) == Model.PANEL){
-            panel = model.getMainPanel();
+            panel = setupComponents(getContentPane());
+            model.setMainPanel(panel);
+            model.commit();
         }
 
         if((changedProps & Model.SEQUENCE) == Model.SEQUENCE){
             try {
                 tiempoRestante = reproduceSecuencia();
-                tiempo.setText(String.valueOf(tiempoRestante));
+                Tiempo.setText(String.valueOf(tiempoRestante));
                 temporizador();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -209,11 +197,11 @@ public class View extends JFrame implements Observer {
         }
 
         if((changedProps & Model.LEVEL) == Model.LEVEL){
-            nivel.setText(String.valueOf(model.getNivel()));
+            Nivel.setText(String.valueOf(model.getNivel()));
         }
 
         if((changedProps & Model.SCORE) == Model.SCORE){
-            Puntuación.setText(String.valueOf(model.getScore()));
+            Puntuacion.setText(String.valueOf(model.getScore()));
         }
         panel.revalidate();
     }

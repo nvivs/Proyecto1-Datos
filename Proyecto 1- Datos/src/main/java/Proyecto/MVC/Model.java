@@ -93,9 +93,6 @@ public class Model extends java.util.Observable{
         mainPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
         mainPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        setMainPanel(mainPanel);
-        commit();
-
         return mainPanel;
     }
 

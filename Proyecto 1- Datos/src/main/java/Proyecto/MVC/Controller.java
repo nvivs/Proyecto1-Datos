@@ -13,13 +13,14 @@ public class Controller {
     View view;
     Model model;
 
-    public Controller(View view, Model model, Color[] colors) {
+    public Controller(View view, Model model, Color[] colors) throws UnsupportedAudioFileException, QueueException, IOException {
         model.init();
         this.view = view;
         this.model = model;
         view.setController(this);
         view.setModel(model);
         model.format(colors, 4);
+        createSequence();
     }
 
     public JPanel format(Color[] colors, int i){
