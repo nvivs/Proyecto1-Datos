@@ -23,7 +23,7 @@ public class View extends JFrame implements Observer {
     private JMenu fileMenu;
     private JMenuItem quitItem;
     private JMenuBar mainMenu;
-    private Color[] COLORS;
+    public Color[] COLORS;
 
     public View() {
 
@@ -37,13 +37,17 @@ public class View extends JFrame implements Observer {
                 new Color(255, 255, 255)
         };
 
+        panel = new JPanel();
+        panel.setFocusable(true);
+        panel.setFocusTraversalKeysEnabled(false);
+
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 int x = e.getX();
                 int y = e.getY();
-
+                System.out.println("Boton");
                 Color colorEnPosicion = obtenerColorEnPosicion(x, y);
 
                 for (int i = 0; i < COLORS.length; i++) {
@@ -55,23 +59,10 @@ public class View extends JFrame implements Observer {
         });
     }
 
-    private Color obtenerColorEnPosicion(int x, int y){
+    public Color obtenerColorEnPosicion(int x, int y){
         BufferedImage panelImage = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
         panel.paint(panelImage.getGraphics());
         return new Color(panelImage.getRGB(x, y));
-    }
-
-    private void setupMenus() {
-        mainMenu = new JMenuBar();
-
-        mainMenu.add(fileMenu = new JMenu("Archivo"));
-        fileMenu.add(quitItem = new JMenuItem("Salir"));
-
-        setJMenuBar(mainMenu);
-
-        quitItem.addActionListener(e -> {
-            closeWindow();
-        });
     }
 
     public void closeWindow() {
@@ -87,7 +78,6 @@ public class View extends JFrame implements Observer {
 
     private JPanel setupComponents(Container c) {
         c.setLayout(new BorderLayout());
-        setupMenus();
         c.add(BorderLayout.CENTER, panel);
         int i = 0;
         if(model.getNivel() <= 5) {// 4 colores
@@ -114,7 +104,7 @@ public class View extends JFrame implements Observer {
         ) == JOptionPane.OK_OPTION;
     }
 
-    public Component getPanel() {
+    public Container getPanel() {
         return panel;
     }
 
@@ -172,7 +162,7 @@ public class View extends JFrame implements Observer {
 
     private void temporizador(){
         Thread thread = new Thread(() -> {
-            for (int i = tiempoRestante; i >= 0; i++) {
+            for (int i = tiempoRestante; i >= 0; i--) {
                 tiempo.setText(String.valueOf(i));
                 tiempoTotal = tiempoRestante - i;
                 try {
@@ -205,7 +195,7 @@ public class View extends JFrame implements Observer {
         int changedProps = (int) properties;
 
         if((changedProps & Model.PANEL) == Model.PANEL){
-            panel = setupComponents(getContentPane());
+            panel = model.getMainPanel();
         }
 
         if((changedProps & Model.SEQUENCE) == Model.SEQUENCE){
