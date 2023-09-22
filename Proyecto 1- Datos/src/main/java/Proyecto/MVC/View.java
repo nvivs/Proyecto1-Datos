@@ -81,6 +81,10 @@ public class View extends JFrame implements Observer {
         }
     }
 
+    public Color[] getColors() {
+        return COLORS;
+    }
+
     private JPanel setupComponents(Container c) {
         c.setLayout(new BorderLayout());
         setupMenus();
@@ -184,7 +188,7 @@ public class View extends JFrame implements Observer {
                         public void componentHidden(ComponentEvent e) {
                             super.componentHidden(e);
                             try {
-                                controller.fail();
+                                controller.fail(COLORS);
                             } catch (UnsupportedAudioFileException | QueueException | IOException ex) {
                                 throw new RuntimeException(ex);
                             }
@@ -266,7 +270,7 @@ public class View extends JFrame implements Observer {
                 public void componentHidden(ComponentEvent e) {
                     super.componentHidden(e);
                     try {
-                        controller.fail();
+                        controller.fail(COLORS);
                     } catch (UnsupportedAudioFileException | QueueException | IOException ex) {
                         throw new RuntimeException(ex);
                     }

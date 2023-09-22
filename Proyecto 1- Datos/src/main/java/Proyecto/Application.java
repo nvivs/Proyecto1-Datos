@@ -17,7 +17,7 @@ public class Application {
 
         Model model = new Model();
         View view = new View();
-        controller = new Controller(view, model);
+        controller = new Controller(view, model, view.getColors());
 
         window.getContentPane().add("Simon dice", view.getPanel());
         window.setTitle("Simon Dice");
