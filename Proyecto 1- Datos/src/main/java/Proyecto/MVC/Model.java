@@ -10,20 +10,18 @@ import Proyecto.Util.Queue;
 
 public class Model extends java.util.Observable{
 
-    Sequence secuencia;
-    JPanel mainPanel;
-    int nivel;
-    int changedProps = NONE;
-    int score;
-    int sequenceIndex;
+    private Sequence secuencia;
+    private JPanel mainPanel;
+    private int nivel;
+    private int changedProps = NONE;
+    private int score;
+    private int sequenceIndex;
 
     public static int NONE = 0;
     public static int SEQUENCE = 1;
     public static int LEVEL = 2;
     public static int SCORE = 4;
     public static int PANEL = 8;
-    public static int SEQUENCEREPRODUCED = 16;
-    public static int RESTART = 32;
 
     @Override
     public synchronized void addObserver(Observer o) {
@@ -40,16 +38,17 @@ public class Model extends java.util.Observable{
     public Model() {
     }
 
-    public void init(){
-        mainPanel = new JPanel();
+    public void init(Color[] colors){
+        mainPanel = format(colors, 4);
         secuencia = new Sequence();
         nivel = 1;
         score = 0;
         sequenceIndex = 0;
+        changedProps = 8;
     }
 
     public JPanel format(Color[] COLORS, int i){
-        mainPanel = new JPanel() {
+        mainPanel = new JPanel(new BorderLayout()) {
             @Override
             public void paintComponent(Graphics bg) {
                 super.paintComponent(bg);
@@ -100,6 +99,8 @@ public class Model extends java.util.Observable{
         return mainPanel;
     }
 
+
+
     public Sequence getSecuencia() {
         return secuencia;
     }
@@ -142,5 +143,6 @@ public class Model extends java.util.Observable{
     public void setMainPanel(JPanel mainPanel) {
         this.mainPanel = mainPanel;
         changedProps += PANEL;
+        mainPanel.repaint();
     }
 }

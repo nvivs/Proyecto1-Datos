@@ -14,13 +14,10 @@ public class Controller {
     Model model;
 
     public Controller(View view, Model model, Color[] colors) throws UnsupportedAudioFileException, QueueException, IOException {
-        model.init();
+        model.init(colors);
         this.view = view;
         this.model = model;
         view.setController(this);
-        model.format(colors, 4);
-        model.changedProps += Model.PANEL;
-        createSequence();
         view.setModel(model);
     }
 
@@ -28,9 +25,54 @@ public class Controller {
         return model.format(colors, i);
     }
 
+//    public void reproduceSecuencia(){
+//        if(model.getSequenceIndex() > 0){
+//            int x = 0;
+//            if(model.getNivel() <= 5) {// 4 colores
+//                x = 4;
+//            }else if(model.getNivel() <= 10){// 5 colores
+//                x = 5;
+//            }else if(model.getNivel() <= 15){// 6 colores
+//                x = 6;
+//            }else if(model.getNivel() > 15){// 7 colores
+//                x = 7;
+//            }
+//            Color[] colores = view.COLORS;
+//
+//            colores[model.getSecuencia().getIndex()] = model.getSecuencia().getSequence().iterator().next().getColor();
+//            model.setMainPanel(model.format(colores, x));
+//            model.commit();
+//
+//        }else {
+//            model.changedProps = Model.NONE;
+//            view.tiempoRestante = view.setTiempoRestante();
+//            view.Tiempo.setText(String.valueOf(view.tiempoRestante));
+//            view.temporizador();
+//        }
+//    }
+//
+//    public void reinicia(){
+//        int x = 0;
+//        if(model.getNivel() <= 5) {// 4 colores
+//            x = 4;
+//        }else if(model.getNivel() <= 10){// 5 colores
+//            x = 5;
+//        }else if(model.getNivel() <= 15){// 6 colores
+//            x = 6;
+//        }else if(model.getNivel() > 15){// 7 colores
+//            x = 7;
+//        }
+//        model.setSequenceIndex(model.getSequenceIndex() - 1);
+//        view.initColors();
+//        view.panel = model.format(view.COLORS, x);
+//        model.setMainPanel(view.panel);
+//        model.commit();
+//    }
+
     public void createSequence() throws UnsupportedAudioFileException, QueueException, IOException {
         model.setSecuencia(Service.instance().createSequence());
         model.setSequenceIndex(Service.instance().createSequence().getSequence().count());
+        model.commit();
     }
 
     public void check(Color color) throws QueueException, UnsupportedAudioFileException, IOException {
@@ -45,7 +87,7 @@ public class Controller {
     }
 
     public void fail(Color[] colors) throws UnsupportedAudioFileException, QueueException, IOException {
-        model.init();
+        model.init(colors);
         format(colors, 4);
         createSequence();
     }

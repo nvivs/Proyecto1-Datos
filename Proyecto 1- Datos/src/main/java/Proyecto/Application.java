@@ -26,22 +26,23 @@ public class Application {
         window.setSize(503, 530);
         window.setResizable(true);
         window.setVisible(true);
-        window.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                int x = e.getX();
-                int y = e.getY();
-                Color colorEnPosicion = view.obtenerColorEnPosicion(x, y);
 
-                for (int i = 0; i < view.COLORS.length; i++) {
-                    if (colorEnPosicion.equals(view.COLORS[i])) {
-                        System.out.println(view.COLORS[i]);
-                       //view.check(view.COLORS[i]);
-                    }
-                }
-            }
-        });
+//        window.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                super.mouseClicked(e);
+//                int x = e.getX();
+//                int y = e.getY();
+//                Color colorEnPosicion = view.obtenerColorEnPosicion(x, y);
+//
+//                for (int i = 0; i < view.COLORS.length; i++) {
+//                    if (colorEnPosicion.equals(view.COLORS[i])) {
+//                        System.out.println(view.COLORS[i]);
+//                       //view.check(view.COLORS[i]);
+//                    }
+//                }
+//            }
+//        });
     }
 
     public static JFrame window;

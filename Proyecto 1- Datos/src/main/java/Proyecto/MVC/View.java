@@ -8,25 +8,23 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.lang.management.BufferPoolMXBean;
 import java.util.Observable;
 import java.util.Observer;
 import static java.lang.Thread.sleep;
 
 public class View extends JFrame implements Observer {
-    private JPanel panel;
-    private JButton[] botones;
+    JPanel panel;
+    private JLabel puntuacionLbl;
+    private JLabel puntuacion;
+    private JLabel nivelLbl;
+    private JLabel nivel;
+    private JLabel tiempoLbl;
+    private JLabel tiempo;
+    private JPanel buttons;
     int tiempoRestante;
     int tiempoTotal;
-    private JMenu fileMenu;
-    private JMenuItem quitItem;
-    private JMenuBar mainMenu;
     public Color[] COLORS;
-    private JLabel Nivel;
-    private JLabel Puntuacion;
-    private JLabel Tiempo;
-    private JLabel nivelLbl;
-    private JLabel puntuacionLbl;
-    private JLabel tiempoLbl;
 
     public View() {
 
@@ -35,9 +33,6 @@ public class View extends JFrame implements Observer {
         panel = new JPanel();
         panel.setFocusable(true);
         panel.setFocusTraversalKeysEnabled(false);
-        Tiempo.setVisible(true);
-        Nivel.setVisible(true);
-        Puntuacion.setVisible(true);
     }
 
     public Color obtenerColorEnPosicion(int x, int y){
@@ -147,10 +142,10 @@ public class View extends JFrame implements Observer {
         }
     }
 
-    private void temporizador(){
+    void temporizador(){
         Thread thread = new Thread(() -> {
             for (int i = tiempoRestante; i >= 0; i--) {
-                Tiempo.setText(String.valueOf(i));
+                tiempo.setText(String.valueOf(i));
                 tiempoTotal = tiempoRestante - i;
                 try {
                     sleep(1000);
@@ -183,77 +178,45 @@ public class View extends JFrame implements Observer {
 
         if((changedProps & Model.PANEL) == Model.PANEL){
             panel = setupComponents(getContentPane());
-//            panel.add(Tiempo);
-//            panel.add(Puntuacion);
-//            panel.add(Nivel);
-//            panel.add(tiempoLbl);
-//            panel.add(puntuacionLbl);
-//            panel.add(nivelLbl);
-        }
 
-        if((changedProps & Model.SEQUENCEREPRODUCED) == Model.SEQUENCEREPRODUCED){
-            if(model.getSequenceIndex() > 0){
-                int x = 0;
-                if(model.getNivel() <= 5) {// 4 colores
-                    x = 4;
-                }else if(model.getNivel() <= 10){// 5 colores
-                    x = 5;
-                }else if(model.getNivel() <= 15){// 6 colores
-                    x = 6;
-                }else if(model.getNivel() > 15){// 7 colores
-                    x = 7;
-                }
-                Color[] colores = COLORS;
+            JPanel datos = new JPanel(new GridLayout());
 
-                colores[model.getSecuencia().getIndex()] = model.getSecuencia().getSequence().iterator().next().getColor();
-                panel = controller.format(colores, x);
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.anchor = GridBagConstraints.NORTHEAST; // Alinea los botones en la esquina superior derecha
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.insets = new Insets(5, 5, 5, 5); // Espaciado entre los botones
 
-                try {
-                   espera();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
 
-                model.setSequenceIndex(model.getSequenceIndex() - 1);
-                model.changedProps = Model.RESTART;
-                model.commit();
-//                model.changedProps = Model.SEQUENCEREPRODUCED;
-//                model.commit();
-            }else {
-                model.changedProps = Model.NONE;
-                tiempoRestante = setTiempoRestante();
-                Tiempo.setText(String.valueOf(tiempoRestante));
-                temporizador();
-            }
-        }
+            puntuacionLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+            nivelLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+            tiempoLbl.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        if((changedProps & Model.RESTART) == Model.RESTART){
-            int x = 0;
-            if(model.getNivel() <= 5) {// 4 colores
-                x = 4;
-            }else if(model.getNivel() <= 10){// 5 colores
-                x = 5;
-            }else if(model.getNivel() <= 15){// 6 colores
-                x = 6;
-            }else if(model.getNivel() > 15){// 7 colores
-                x = 7;
-            }
-            initColors();
-            panel = controller.format(COLORS, x);
-            model.changedProps = Model.SEQUENCEREPRODUCED;
+            datos.add(tiempoLbl, gbc);
+            datos.add(tiempo, gbc);
+            gbc.gridy = 1;
+            datos.add(puntuacionLbl, gbc);
+            datos.add(puntuacion, gbc);
+            gbc.gridy = 2;
+            datos.add(nivelLbl, gbc);
+            datos.add(nivel, gbc);
+
+            datos.setBackground(Color.WHITE);
+            datos.setForeground(Color.WHITE);
+
+            panel.add(datos, BorderLayout.NORTH);
         }
 
         if((changedProps & Model.SEQUENCE) == Model.SEQUENCE){
-            model.changedProps = Model.SEQUENCEREPRODUCED;
-            //model.commit();
+            panel = model.getMainPanel();
         }
 
         if((changedProps & Model.LEVEL) == Model.LEVEL){
-            Nivel.setText(String.valueOf(model.getNivel()));
+            nivel.setText(String.valueOf(model.getNivel()));
         }
 
         if((changedProps & Model.SCORE) == Model.SCORE){
-            Puntuacion.setText(String.valueOf(model.getScore()));
+            puntuacion.setText(String.valueOf(model.getScore()));
         }
         panel.revalidate();
     }
