@@ -13,23 +13,11 @@ public class SequencePart {
         this.sound = sound;
     }
 
-    public SequencePart() {
-        new SequencePart(null, null);
-    }
-
     public Color getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
     public AudioInputStream getSound() {
         return sound;
-    }
-
-    public void setSound(AudioInputStream sound) {
-        this.sound = sound;
     }
 }

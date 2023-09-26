@@ -1,10 +1,8 @@
 package Proyecto.data;
 
-import Proyecto.Util.Queue;
 import Proyecto.logic.Level;
 import Proyecto.logic.Score;
 import Proyecto.logic.Sequence;
-import Proyecto.logic.SequencePart;
 
 public class Data {
     private Sequence sequence;

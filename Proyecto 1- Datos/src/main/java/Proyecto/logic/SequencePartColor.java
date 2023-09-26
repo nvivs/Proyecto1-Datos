@@ -1,6 +1,9 @@
 package Proyecto.logic;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class SequencePartColor {
     private final Color RED;
@@ -11,6 +14,7 @@ public class SequencePartColor {
     private final Color PINK;
     private final Color LIGTHBLUE;
     private static SequencePartColor instance;
+    Map<String, Color> codigos = new HashMap<>();
 
     public static SequencePartColor instance(){
         if (instance == null) instance = new SequencePartColor();
@@ -25,6 +29,21 @@ public class SequencePartColor {
         ORANGE = new Color(148, 80, 42, 255);
         PINK = new Color(140, 26, 113, 255);
         LIGTHBLUE = new Color(2, 92, 98, 255);
+        codigos.put("RED", RED);
+        codigos.put("BLUE", BLUE);
+        codigos.put("GREEN", GREEN);
+        codigos.put("YELLOW", YELLOW);
+        codigos.put("ORANGE", ORANGE);
+        codigos.put("PINK", PINK);
+        codigos.put("LIGTHBLUE", LIGTHBLUE);
+    }
+
+    public Color getColor(String cod) {
+        if (codigos.containsKey(cod)) {
+            return codigos.get(cod);
+        } else {
+            throw new IllegalArgumentException("Variable no encontrada: " + cod);
+        }
     }
 
     public Color getColor(int i){

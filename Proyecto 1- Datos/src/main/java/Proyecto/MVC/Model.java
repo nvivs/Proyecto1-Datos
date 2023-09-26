@@ -2,147 +2,116 @@ package Proyecto.MVC;
 
 import Proyecto.logic.Sequence;
 import Proyecto.logic.SequencePart;
+import Proyecto.logic.SequencePartColor;
+import Proyecto.logic.Service;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Observer;
-import Proyecto.Util.Queue;
 
-public class Model extends java.util.Observable{
-
-    private Sequence secuencia;
-    private JPanel mainPanel;
-    private int nivel;
-    private int changedProps = NONE;
-    private int score;
-    private int sequenceIndex;
-
-    public static int NONE = 0;
-    public static int SEQUENCE = 1;
-    public static int LEVEL = 2;
-    public static int SCORE = 4;
-    public static int PANEL = 8;
-
-    @Override
-    public synchronized void addObserver(Observer o) {
-        super.addObserver(o);
-        commit();
-    }
-
-    public void commit(){
-        setChanged();
-        notifyObservers(changedProps);
-        changedProps = NONE;
-    }
+public class Model extends JPanel {
+    private int currentIndex;
+    private Color[] colors;
+    int tam;
 
     public Model() {
+        this.colors = colors;
+        this.currentIndex = 0;
+        tam = 4;
+        initColors();
+        repaint();
     }
 
-    public void init(Color[] colors){
-        mainPanel = format(colors, 4);
-        secuencia = new Sequence();
-        nivel = 1;
-        score = 0;
-        sequenceIndex = 0;
-        changedProps = 8;
-    }
-
-    public JPanel format(Color[] COLORS, int i){
-        mainPanel = new JPanel(new BorderLayout()) {
-            @Override
-            public void paintComponent(Graphics bg) {
-                super.paintComponent(bg);
-                Graphics2D g = (Graphics2D) bg;
-                g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                        RenderingHints.VALUE_ANTIALIAS_ON);
-
-                int cx = getWidth() / 2;
-                int cy = getHeight() / 2;
-                g.setColor(Color.WHITE);
-                g.drawLine(cx, 0, cx, getHeight());
-                g.drawLine(0, cy, getWidth(), cy);
-
-                int s = (int) (0.80 * Math.min(getWidth(), getHeight()));
-
-                int n = i;
-                for (int i = 0; i < n; i++) {
-                    drawWedge(g, cx, cy, s, (i * 360 - 180) / n, 360 / n, COLORS[i]);
-                }
-
-                g.setColor(Color.DARK_GRAY);
-                g.fillOval(cx - s / 6, cy - s / 6, s / 3, s / 3);
-            }
-
-            private void drawWedge(Graphics2D g, int cx, int cy, int s, int start, int end, Color c) {
-
-                double r = Math.PI / 180.0;
-                int x0 = (int) (cx + s * 0.5 * Math.cos(-start * r));
-                int y0 = (int) (cy + s * 0.5 * Math.sin(-start * r));
-                int x1 = (int) (cx + s * 0.5 * Math.cos(-(start + end) * r));
-                int y1 = (int) (cy + s * 0.5 * Math.sin(-(start + end) * r));
-
-                g.setColor(c);
-                g.fillArc(cx - s / 2, cy - s / 2, s, s, start, end);
-
-                g.setColor(Color.DARK_GRAY);
-                g.setStroke(new BasicStroke(16f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
-                g.drawLine(cx, cy, x0, y0);
-                g.drawLine(cx, cy, x1, y1);
-                g.drawArc(cx - s / 2, cy - s / 2, s, s, start, end);
-            }
+    public void initColors(){
+        colors = new Color[]{
+                new Color(255, 0, 0),
+                new Color(33, 255, 0),
+                new Color(255, 243, 0),
+                new Color(0, 42, 255),
+                new Color(255, 136, 0),
+                new Color(223, 0, 255),
+                new Color(0, 245, 255, 255)
         };
-
-        mainPanel.setBackground(Color.WHITE);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
-        mainPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-        return mainPanel;
-    }
-
-
-
-    public Sequence getSecuencia() {
-        return secuencia;
     }
 
     public void setSecuencia(Sequence secuencia) {
-        this.secuencia = secuencia;
-        changedProps += SEQUENCE;
+        for(SequencePart i : secuencia.getSequence()){
+            if(i.getColor().equals(SequencePartColor.instance().getColor("RED"))){
+                colors[0] = SequencePartColor.instance().getColor("RED");
+            }else if(i.getColor().equals(SequencePartColor.instance().getColor("GREEN"))){
+                colors[1] = SequencePartColor.instance().getColor("GREEN");
+            }else if(i.getColor().equals(SequencePartColor.instance().getColor("YELLOW"))){
+                colors[2] = SequencePartColor.instance().getColor("YELLOW");
+            }else if(i.getColor().equals(SequencePartColor.instance().getColor("BLUE"))){
+                colors[3] = SequencePartColor.instance().getColor("BLUE");
+            }else if(i.getColor().equals(SequencePartColor.instance().getColor("ORANGE"))){
+                colors[4] = SequencePartColor.instance().getColor("ORANGE");
+            }else if(i.getColor().equals(SequencePartColor.instance().getColor("PINK"))){
+                colors[5] = SequencePartColor.instance().getColor("PINK");
+            }else if(i.getColor().equals(SequencePartColor.instance().getColor("LIGTHBLUE"))){
+                colors[6] = SequencePartColor.instance().getColor("LIGTHBLUE");
+            }
+        }
     }
 
-    public int getSequenceIndex() {
-        return sequenceIndex;
+    public void showColor() {
+        if (currentIndex < tam) {
+            // Muestra el color actual en el panel
+            //setBackground(colors[currentIndex]);
+            repaint();
+            currentIndex++;
+        }
     }
 
-    public void setSequenceIndex(int sequenceIndex) {
-        this.sequenceIndex = sequenceIndex;
+    public void x(){
+
     }
 
-    public int getNivel() {
-        return nivel;
+    public void reset() {
+        // Reinicia el panel
+        //setBackground(Color.WHITE);
+        initColors();
+        currentIndex = 0;
+        repaint();
     }
 
-    public void setNivel(int nivel) {
-        this.nivel = nivel;
-        changedProps += LEVEL;
+    public void paintComponent (Graphics bg){
+        super.paintComponent(bg);
+        Graphics2D g = (Graphics2D) bg;
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+        int cx = getWidth() / 2;
+        int cy = getHeight() / 2;
+        g.setColor(Color.WHITE);
+        g.drawLine(cx, 0, cx, getHeight());
+        g.drawLine(0, cy, getWidth(), cy);
+
+        int s = (int) (0.80 * Math.min(getWidth(), getHeight()));
+
+        int n = tam;
+        for (int i = 0; i < n; i++) {
+            drawWedge(g, cx, cy, s, (i * 360 - 180) / n, 360 / n, colors[i]);
+        }
+
+        g.setColor(Color.DARK_GRAY);
+        g.fillOval(cx - s / 6, cy - s / 6, s / 3, s / 3);
     }
 
-    public int getScore() {
-        return score;
-    }
+    private void drawWedge (Graphics2D g,int cx, int cy, int s, int start, int end, Color c){
 
-    public void setScore(int score) {
-        this.score = score;
-        changedProps += SCORE;
-    }
+        double r = Math.PI / 180.0;
+        int x0 = (int) (cx + s * 0.5 * Math.cos(-start * r));
+        int y0 = (int) (cy + s * 0.5 * Math.sin(-start * r));
+        int x1 = (int) (cx + s * 0.5 * Math.cos(-(start + end) * r));
+        int y1 = (int) (cy + s * 0.5 * Math.sin(-(start + end) * r));
 
-    public JPanel getMainPanel() {
-        return mainPanel;
-    }
+        g.setColor(c);
+        g.fillArc(cx - s / 2, cy - s / 2, s, s, start, end);
 
-    public void setMainPanel(JPanel mainPanel) {
-        this.mainPanel = mainPanel;
-        changedProps += PANEL;
-        mainPanel.repaint();
+        g.setColor(Color.DARK_GRAY);
+        g.setStroke(new BasicStroke(16f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
+        g.drawLine(cx, cy, x0, y0);
+        g.drawLine(cx, cy, x1, y1);
+        g.drawArc(cx - s / 2, cy - s / 2, s, s, start, end);
     }
 }

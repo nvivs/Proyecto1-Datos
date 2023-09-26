@@ -1,11 +1,9 @@
 package Proyecto.logic;
 
-import Proyecto.Util.Queue;
 import Proyecto.Util.QueueException;
 import Proyecto.data.Data;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
@@ -33,6 +31,10 @@ public class Service {
 
     public Sequence getSequence() {
         return data.getSequence();
+    }
+
+    public Score getScore(){
+        return data.getScore();
     }
 
     public void check(Color color) throws Exception {

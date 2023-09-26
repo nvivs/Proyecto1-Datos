@@ -32,4 +32,8 @@ public class Score {
         }
         return score;
     }
+
+    public void resetScore(){
+        score = 0;
+    }
 }

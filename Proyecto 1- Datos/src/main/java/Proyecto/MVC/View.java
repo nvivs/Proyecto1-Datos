@@ -1,272 +1,78 @@
 package Proyecto.MVC;
 
-import Proyecto.Util.QueueException;
-
-import javax.sound.sampled.*;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.lang.management.BufferPoolMXBean;
-import java.util.Observable;
-import java.util.Observer;
-import static java.lang.Thread.sleep;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
-public class View extends JFrame implements Observer {
-    JPanel panel;
-    private JLabel puntuacionLbl;
-    private JLabel puntuacion;
-    private JLabel nivelLbl;
-    private JLabel nivel;
-    private JLabel tiempoLbl;
-    private JLabel tiempo;
-    private JPanel buttons;
-    int tiempoRestante;
-    int tiempoTotal;
-    public Color[] COLORS;
+public class View extends JFrame {
+    private Model panel;
+    private JButton startButton;
+    private JLabel levelLabel;
+    private JLabel scoreLabel;
+    private Timer timer;
 
-    public View() {
-
-        initColors();
-
-        panel = new JPanel();
-        panel.setFocusable(true);
-        panel.setFocusTraversalKeysEnabled(false);
-    }
-
-    public Color obtenerColorEnPosicion(int x, int y){
-        BufferedImage panelImage = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
-        panel.paint(panelImage.getGraphics());
-        return new Color(panelImage.getRGB(x, y));
-    }
-
-    public void closeWindow() {
-        if (confirmClose()) {
-            System.out.println("Cerrando la aplicación..");
-            System.exit(0);
-        }
-    }
-
-    public Color[] getColors() {
-        return COLORS;
-    }
-
-    private JPanel setupComponents(Container c) {
-        c.setLayout(new BorderLayout());
-        c.add(BorderLayout.CENTER, panel);
-        int i = 0;
-        if(model.getNivel() <= 5) {// 4 colores
-            i = 4;
-        }else if(model.getNivel() <= 10){// 5 colores
-            i = 5;
-        }else if(model.getNivel() <= 15){// 6 colores
-            i = 6;
-        }else if(model.getNivel() > 15){// 7 colores
-            i = 7;
-        }
-
-        return controller.format(COLORS, i);
-    }
-
-
-    public boolean confirmClose() {
-        Object[] options = {"Sí", "No"};
-        return JOptionPane.showOptionDialog(this,
-                "¿Desea cerrar la aplicación?", "Confirmación",
-                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null,
-                options, // texto de los botones
-                options[0] // opción por defecto
-        ) == JOptionPane.OK_OPTION;
-    }
-
-    public Container getPanel() {
+    public Model getPanel() {
         return panel;
     }
 
-    public void initColors(){
-        COLORS = new Color[]{
-                new Color(255, 0, 0),
-                new Color(33, 255, 0),
-                new Color(255, 243, 0),
-                new Color(0, 42, 255),
-                new Color(255, 136, 0),
-                new Color(223, 0, 255),
-                new Color(0, 245, 255, 255)
-        };
-    }
+    public View() {
 
-    public int setTiempoRestante(){
-//            try(Clip clip = AudioSystem.getClip()){
-//                clip.open(model.getSecuencia().iterator().next().getSound());
-//                clip.start();
-//                //Thread.sleep(clip.getMicrosecondLength() / 1_000);
-//            } catch (IOException
-//                     //| InterruptedException
-//                     | LineUnavailableException ex) {
-//                System.err.printf("Excepción: '%s'%n", ex.getMessage());
-//            }
-        if (model.getNivel() == 1) {
-            tiempoRestante = 30;
-        } else if (model.getNivel() <= 4) {
-            tiempoRestante = 25;
-        } else if (model.getNivel() <= 7) {
-            tiempoRestante = 20;
-        } else if (model.getNivel() <= 10) {
-            tiempoRestante = 15;
-        } else if (model.getNivel() <= 13) {
-            tiempoRestante = 10;
-        } else if (model.getNivel() <= 15) {
-            tiempoRestante = 5;
-        } else if (model.getNivel() > 15) {
-            tiempoRestante = 2;
-        }
-        return tiempoRestante;
-    }
+        setTitle("Simon Dice");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 400);
+        setLayout(new BorderLayout());
 
-    public void espera() throws InterruptedException {
-        if (model.getNivel() == 1) {
-            sleep(5000);
-        } else if (model.getNivel() <= 4) {
-            sleep(4000);
-        } else if (model.getNivel() <= 7) {
-            sleep(3000);
-        } else if (model.getNivel() <= 10) {
-            sleep(2000);
-        } else if (model.getNivel() <= 13) {
-            sleep(1000);
-        } else if (model.getNivel() <= 15) {
-            sleep(500);
-        } else if (model.getNivel() > 15) {
-            sleep(100);
-        }
-    }
+        panel = new Model();
+        add(panel, BorderLayout.CENTER);
 
-    void temporizador(){
-        Thread thread = new Thread(() -> {
-            for (int i = tiempoRestante; i >= 0; i--) {
-                tiempo.setText(String.valueOf(i));
-                tiempoTotal = tiempoRestante - i;
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                if (i == 0) {
-                    JOptionPane pane = new JOptionPane();
-                    pane.showMessageDialog(panel, "Te has quedado sin tiempo", "HAZ PERDIDO", JOptionPane.INFORMATION_MESSAGE);
-                    pane.addComponentListener(new ComponentAdapter() {
-                        @Override
-                        public void componentHidden(ComponentEvent e) {
-                            super.componentHidden(e);
-                            try {
-                                controller.fail(COLORS);
-                            } catch (UnsupportedAudioFileException | QueueException | IOException ex) {
-                                throw new RuntimeException(ex);
-                            }
-                        }
-                    });
-                }
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        startButton = new JButton("Iniciar");
+        buttonPanel.add(startButton);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        levelLabel = new JLabel(" Nivel: 1");
+        scoreLabel = new JLabel(" Puntuación: 0");
+
+        JPanel infoPanel = new JPanel(new GridLayout(2, 1));
+        infoPanel.add(levelLabel);
+        infoPanel.add(scoreLabel);
+        add(infoPanel, BorderLayout.NORTH);
+
+        // Configura el temporizador para mostrar los colores
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.showColor();
             }
         });
-        thread.start();
+
+        setVisible(true);
     }
 
-    @Override
-    public void update(Observable o, Object properties) {
-        int changedProps = (int) properties;
-
-        if((changedProps & Model.PANEL) == Model.PANEL){
-            panel = setupComponents(getContentPane());
-
-            JPanel datos = new JPanel(new GridLayout());
-
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.anchor = GridBagConstraints.NORTHEAST; // Alinea los botones en la esquina superior derecha
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            gbc.insets = new Insets(5, 5, 5, 5); // Espaciado entre los botones
-
-
-            puntuacionLbl.setHorizontalAlignment(SwingConstants.RIGHT);
-            nivelLbl.setHorizontalAlignment(SwingConstants.RIGHT);
-            tiempoLbl.setHorizontalAlignment(SwingConstants.RIGHT);
-
-            datos.add(tiempoLbl, gbc);
-            datos.add(tiempo, gbc);
-            gbc.gridy = 1;
-            datos.add(puntuacionLbl, gbc);
-            datos.add(puntuacion, gbc);
-            gbc.gridy = 2;
-            datos.add(nivelLbl, gbc);
-            datos.add(nivel, gbc);
-
-            datos.setBackground(Color.WHITE);
-            datos.setForeground(Color.WHITE);
-
-            panel.add(datos, BorderLayout.NORTH);
-        }
-
-        if((changedProps & Model.SEQUENCE) == Model.SEQUENCE){
-            panel = model.getMainPanel();
-        }
-
-        if((changedProps & Model.LEVEL) == Model.LEVEL){
-            nivel.setText(String.valueOf(model.getNivel()));
-        }
-
-        if((changedProps & Model.SCORE) == Model.SCORE){
-            puntuacion.setText(String.valueOf(model.getScore()));
-        }
-        panel.revalidate();
+    public void setStartButtonListener(ActionListener listener) {
+        startButton.addActionListener(listener);
     }
 
-    Controller controller;
-    Model model;
-
-    public void setController(Controller controller) {
-        this.controller = controller;
+    public void setTimerListener(ActionListener listener) {
+        timer.addActionListener(listener);
     }
 
-    public void setModel(Model model) {
-        this.model = model;
-        model.addObserver(this);
+    public void updateLevel(int level) {
+        levelLabel.setText(" Nivel: " + level);
     }
 
-    public void check(Color color){
-        try {
-            controller.check(color);
-        } catch (QueueException ex) {// si ganó
-            JOptionPane.showMessageDialog(panel, "Haz completado la secuencia correctamente", "HAZ GANADO", JOptionPane.INFORMATION_MESSAGE);
-            int x = 0;
-            if(model.getNivel() <= 5) {// 4 colores
-                x = 4;
-            }else if(model.getNivel() <= 10){// 5 colores
-                x = 5;
-            }else if(model.getNivel() <= 15){// 6 colores
-                x = 6;
-            }else if(model.getNivel() > 15){// 7 colores
-                x = 7;
-            }
-            controller.win(tiempoTotal, tiempoRestante, x, COLORS);
-        }
-        catch (RuntimeException ex){// si perdió
-            JOptionPane pane = new JOptionPane();
-            pane.showMessageDialog(panel, "Haz fallado al imitar la secuencia", "HAZ PERDIDO", JOptionPane.INFORMATION_MESSAGE);
-            pane.addComponentListener(new ComponentAdapter() {
-                @Override
-                public void componentHidden(ComponentEvent e) {
-                    super.componentHidden(e);
-                    try {
-                        controller.fail(COLORS);
-                    } catch (UnsupportedAudioFileException | QueueException | IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-            });
-        }
-        catch (UnsupportedAudioFileException | IOException ex){
-            throw new RuntimeException(ex);
-        }
+    public void updateScore(int score) {
+        scoreLabel.setText(" Puntuación: " + score);
+    }
+
+    public void startTimer() {
+        timer.start();
+    }
+
+    public void stopTimer() {
+        timer.stop();
     }
 }
