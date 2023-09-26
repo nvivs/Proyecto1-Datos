@@ -26,6 +26,7 @@ public class View extends JFrame {
         setLayout(new BorderLayout());
 
         panel = new Model();
+
         add(panel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -54,6 +55,10 @@ public class View extends JFrame {
 
     public void setStartButtonListener(ActionListener listener) {
         startButton.addActionListener(listener);
+    }
+
+    public void setPanel(Model panel) {
+        this.panel = panel;
     }
 
     public void setTimerListener(ActionListener listener) {

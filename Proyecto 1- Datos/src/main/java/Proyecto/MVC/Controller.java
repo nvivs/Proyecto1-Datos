@@ -19,6 +19,7 @@ public class Controller {
     public Controller(Model model, View view) {
         this.model = model;
         this.view = view;
+        view.setPanel(model);
         this.currentLevel = 1;
         this.playerTurn = false;
 
