@@ -33,23 +33,21 @@ public class Model extends JPanel {
         };
     }
 
-    public void setSecuencia(Sequence secuencia) {
-        for(SequencePart i : secuencia.getSequence()){
-            if(i.getColor().equals(SequencePartColor.instance().getColor("RED"))){
-                colors[0] = SequencePartColor.instance().getColor("RED");
-            }else if(i.getColor().equals(SequencePartColor.instance().getColor("GREEN"))){
-                colors[1] = SequencePartColor.instance().getColor("GREEN");
-            }else if(i.getColor().equals(SequencePartColor.instance().getColor("YELLOW"))){
-                colors[2] = SequencePartColor.instance().getColor("YELLOW");
-            }else if(i.getColor().equals(SequencePartColor.instance().getColor("BLUE"))){
-                colors[3] = SequencePartColor.instance().getColor("BLUE");
-            }else if(i.getColor().equals(SequencePartColor.instance().getColor("ORANGE"))){
-                colors[4] = SequencePartColor.instance().getColor("ORANGE");
-            }else if(i.getColor().equals(SequencePartColor.instance().getColor("PINK"))){
-                colors[5] = SequencePartColor.instance().getColor("PINK");
-            }else if(i.getColor().equals(SequencePartColor.instance().getColor("LIGTHBLUE"))){
-                colors[6] = SequencePartColor.instance().getColor("LIGTHBLUE");
-            }
+    public void changeColor(Color color) {
+        if(color.equals(SequencePartColor.instance().getColor("RED"))){
+            colors[0] = SequencePartColor.instance().getColor("RED");
+        }else if(color.equals(SequencePartColor.instance().getColor("GREEN"))){
+            colors[1] = SequencePartColor.instance().getColor("GREEN");
+        }else if(color.equals(SequencePartColor.instance().getColor("YELLOW"))){
+            colors[2] = SequencePartColor.instance().getColor("YELLOW");
+        }else if(color.equals(SequencePartColor.instance().getColor("BLUE"))){
+            colors[3] = SequencePartColor.instance().getColor("BLUE");
+        }else if(color.equals(SequencePartColor.instance().getColor("ORANGE"))){
+            colors[4] = SequencePartColor.instance().getColor("ORANGE");
+        }else if(color.equals(SequencePartColor.instance().getColor("PINK"))){
+            colors[5] = SequencePartColor.instance().getColor("PINK");
+        }else if(color.equals(SequencePartColor.instance().getColor("LIGTHBLUE"))){
+            colors[6] = SequencePartColor.instance().getColor("LIGTHBLUE");
         }
     }
 

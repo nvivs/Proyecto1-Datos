@@ -2,19 +2,23 @@ package Proyecto.MVC;
 
 import Proyecto.Util.QueueException;
 import Proyecto.data.Data;
+import Proyecto.logic.SequencePart;
 import Proyecto.logic.Service;
+import org.testng.internal.collections.ArrayIterator;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Iterator;
 
 public class Controller {
     private Model model;
     private View view;
     private int currentLevel;
     private boolean playerTurn;
+    private Iterator<SequencePart> iterator;
 
     public Controller(Model model, View view) {
         this.model = model;
@@ -53,8 +57,7 @@ public class Controller {
         // Reiniciar el modelo y la vista
         model.reset();
         Service.instance().getSequence().createSequence(currentLevel);
-        model.setSecuencia(Service.instance().getSequence());
-
+        iterator = Service.instance().getSequence().getSequence().iterator();
         Service.instance().getScore().resetScore();
         view.updateLevel(currentLevel);
         view.updateScore(Service.instance().getScore().getScore());
@@ -72,8 +75,8 @@ public class Controller {
             // Luego, actualiza el modelo y la vista según el resultado
         } else {
             // Muestra el siguiente color en la secuencia
-            if (!Service.instance().getSequence().getSequence().isEmpty()) {
-                Service.instance().getSequence().getSequence().dequeue();
+            if (iterator.hasNext()) {
+                model.changeColor(iterator.next().getColor());
                 view.startTimer(); // Reiniciar temporizador para mostrar el color
                 view.updateScore(Service.instance().getScore().getScore());
             } else {
