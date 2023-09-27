@@ -24,7 +24,7 @@ public class Controller {
         this.model = model;
         this.view = view;
         view.setPanel(model);
-        this.currentLevel = 1;
+        this.currentLevel = 2;
         this.playerTurn = false;
 
         // Configura el controlador para el botón "Iniciar"
@@ -77,7 +77,7 @@ public class Controller {
             // Muestra el siguiente color en la secuencia
             if (iterator.hasNext()) {
                 model.changeColor(iterator.next().getColor());
-                view.startTimer(); // Reiniciar temporizador para mostrar el color
+                view.repaint();
                 view.updateScore(Service.instance().getScore().getScore());
             } else {
                 // La secuencia ha sido mostrada, es el turno del jugador

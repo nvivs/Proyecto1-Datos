@@ -1,17 +1,36 @@
 package Proyecto.MVC;
 
+import Proyecto.Util.QueueException;
 import Proyecto.logic.Sequence;
-import Proyecto.logic.SequencePart;
 import Proyecto.logic.SequencePartColor;
 import Proyecto.logic.Service;
 
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Timer;
+import Proyecto.Util.Queue;
 
 public class Model extends JPanel {
     private int currentIndex;
     private Color[] colors;
     int tam;
+
+    public void setSequence(Sequence sequence) {
+        this.sequence = sequence;
+    }
+
+    Sequence sequence;
+    Random random;
+
+    public void setCurrentIndex(int currentIndex) {
+        this.currentIndex = currentIndex;
+    }
 
     public Model() {
         this.colors = colors;
@@ -19,6 +38,10 @@ public class Model extends JPanel {
         tam = 4;
         initColors();
         repaint();
+    }
+
+    public Sequence getSequence() {
+        return sequence;
     }
 
     public void initColors(){
@@ -33,7 +56,7 @@ public class Model extends JPanel {
         };
     }
 
-    public void changeColor(Color color) {
+   public void changeColor(Color color) {
         if(color.equals(SequencePartColor.instance().getColor("RED"))){
             colors[0] = SequencePartColor.instance().getColor("RED");
         }else if(color.equals(SequencePartColor.instance().getColor("GREEN"))){
@@ -52,16 +75,7 @@ public class Model extends JPanel {
     }
 
     public void showColor() {
-        if (currentIndex < tam) {
-            // Muestra el color actual en el panel
-            //setBackground(colors[currentIndex]);
-            repaint();
-            currentIndex++;
-        }
-    }
-
-    public void x(){
-
+        currentIndex++;
     }
 
     public void reset() {
@@ -93,7 +107,10 @@ public class Model extends JPanel {
 
         g.setColor(Color.DARK_GRAY);
         g.fillOval(cx - s / 6, cy - s / 6, s / 3, s / 3);
+        g.drawString("Index: " + currentIndex++, 24,34);
+        System.out.println("paintComponent called");
     }
+
 
     private void drawWedge (Graphics2D g,int cx, int cy, int s, int start, int end, Color c){
 

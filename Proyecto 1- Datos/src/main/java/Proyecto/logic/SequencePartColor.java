@@ -4,8 +4,9 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import Proyecto.Util.Queue;
 
-public class SequencePartColor {
+public class SequencePartColor<T>  {
     private final Color RED;
     private final Color BLUE;
     private final Color GREEN;

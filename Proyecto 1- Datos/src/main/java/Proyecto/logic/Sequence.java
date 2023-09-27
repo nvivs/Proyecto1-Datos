@@ -22,6 +22,9 @@ public class Sequence {
         return sequence;
     }
 
+    public int getSize(){
+        return sequence.count();
+    }
     public void setSequence(Queue<SequencePart> sequence) {
         this.sequence = sequence;
     }
@@ -49,19 +52,19 @@ public class Sequence {
             x = 7;
         }
 
-        if(level < 5){
-            index1 = new Random().nextInt(x + 1);
-            index2 = index1;
-        }else{
-            index1 = new Random().nextInt(x + 1);
-            index2 = new Random().nextInt(x + 1);
-        }
         for(int i = 0; i < level; i++) {
+            if(level < 5){
+                index1 = new Random().nextInt(x);
+                index2 = index1;
+            }else{
+                index1 = new Random().nextInt(x);
+                index2 = new Random().nextInt(x);
+            }
             sequence.enqueue(new SequencePart
                     (SequencePartColor.instance().getColor(index1)
                             , SequencePartSound.instance().getSound(index2)));
         }
-        index = index1;
+       // index = index1;
         return this;
     }
 

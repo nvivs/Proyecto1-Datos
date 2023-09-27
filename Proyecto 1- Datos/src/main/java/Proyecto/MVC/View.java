@@ -12,6 +12,7 @@ public class View extends JFrame {
     private JButton startButton;
     private JLabel levelLabel;
     private JLabel scoreLabel;
+
     private Timer timer;
 
     public Model getPanel() {
@@ -43,10 +44,10 @@ public class View extends JFrame {
         add(infoPanel, BorderLayout.NORTH);
 
         // Configura el temporizador para mostrar los colores
-        timer = new Timer(1000, new ActionListener() {
+        timer = new Timer(1500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                panel.showColor();
+//
             }
         });
 
@@ -54,6 +55,8 @@ public class View extends JFrame {
     }
 
     public void setStartButtonListener(ActionListener listener) {
+
+
         startButton.addActionListener(listener);
     }
 

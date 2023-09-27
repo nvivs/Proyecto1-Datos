@@ -42,9 +42,9 @@ public class Application {
 //            controller.playSequence();
 //        });
 
-        Model model = new Model();
         View view = new View();
-        Controller controller = new Controller(model, view);
+       //view.setPanel(new Model());
+        Controller controller = new Controller(view.getPanel(), view);
 
         view.setVisible(true);
     }
