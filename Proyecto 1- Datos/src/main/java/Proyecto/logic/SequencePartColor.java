@@ -24,12 +24,12 @@ public class SequencePartColor<T>  {
 
     public SequencePartColor() {
         RED = new Color(148, 33, 33, 255);
-        BLUE = new Color(16, 26, 82, 255);
-        GREEN = new Color(30, 63, 15, 255);
-        YELLOW = new Color(119, 89, 36, 255);
-        ORANGE = new Color(148, 80, 42, 255);
-        PINK = new Color(140, 26, 113, 255);
-        LIGTHBLUE = new Color(2, 92, 98, 255);
+        BLUE = new Color(27, 44, 143, 255);
+        GREEN = new Color(63, 136, 29, 255);
+        YELLOW = new Color(180, 172, 35);
+        ORANGE = new Color(176, 89, 36, 255);
+        PINK = new Color(168, 28, 138, 255);
+        LIGTHBLUE = new Color(17, 132, 141, 255);
         codigos.put("RED", RED);
         codigos.put("BLUE", BLUE);
         codigos.put("GREEN", GREEN);

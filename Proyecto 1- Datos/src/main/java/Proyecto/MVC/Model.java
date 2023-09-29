@@ -107,8 +107,6 @@ public class Model extends JPanel {
 
         g.setColor(Color.DARK_GRAY);
         g.fillOval(cx - s / 6, cy - s / 6, s / 3, s / 3);
-        g.drawString("Index: " + currentIndex++, 24,34);
-        System.out.println("paintComponent called");
     }
 
 

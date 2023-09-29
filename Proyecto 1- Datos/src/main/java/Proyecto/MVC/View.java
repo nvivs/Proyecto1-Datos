@@ -47,7 +47,6 @@ public class View extends JFrame {
         timer = new Timer(1500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//
             }
         });
 

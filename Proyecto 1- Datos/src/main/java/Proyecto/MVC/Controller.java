@@ -24,7 +24,7 @@ public class Controller {
         this.model = model;
         this.view = view;
         view.setPanel(model);
-        this.currentLevel = 2;
+        this.currentLevel = 1;
         this.playerTurn = false;
 
         // Configura el controlador para el botón "Iniciar"
@@ -33,7 +33,7 @@ public class Controller {
             public void actionPerformed(ActionEvent e) {
                 try {
                     startGame();
-                } catch (UnsupportedAudioFileException | QueueException | IOException ex) {
+                } catch (UnsupportedAudioFileException | QueueException | IOException | InterruptedException ex) {
                     throw new RuntimeException(ex);
                 }
             }
@@ -47,13 +47,17 @@ public class Controller {
                     playerTurn = false;
                     view.stopTimer();
                 } else {
-                    showNextColor();
+                    try {
+                        showNextColor();
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         });
     }
 
-    private void startGame() throws UnsupportedAudioFileException, QueueException, IOException {
+    private void startGame() throws UnsupportedAudioFileException, QueueException, IOException, InterruptedException {
         // Reiniciar el modelo y la vista
         model.reset();
         Service.instance().getSequence().createSequence(currentLevel);
@@ -68,7 +72,7 @@ public class Controller {
         showNextColor();
     }
 
-    private void showNextColor() {
+    private void showNextColor() throws InterruptedException {
         if (playerTurn) {
             // Turno del jugador
             // Configura la lógica para que el jugador seleccione colores y comprueba si son correctos
@@ -76,11 +80,15 @@ public class Controller {
         } else {
             // Muestra el siguiente color en la secuencia
             if (iterator.hasNext()) {
+                model.initColors();
+                view.repaint();
                 model.changeColor(iterator.next().getColor());
                 view.repaint();
                 view.updateScore(Service.instance().getScore().getScore());
             } else {
                 // La secuencia ha sido mostrada, es el turno del jugador
+                model.initColors();
+                view.repaint();
                 playerTurn = true;
                 view.stopTimer();
             }
