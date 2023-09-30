@@ -130,21 +130,21 @@ public class Controller {
                     }
                     if(valid) {
                         if (colorAtPosition.equals(model.getColors()[0])) {
-                            c = SequencePartColor.instance().getColor("RED");
+                            c = model.getColors()[0];
                         } else if (colorAtPosition.equals(model.getColors()[1])) {
-                            c = SequencePartColor.instance().getColor("GREEN");
+                            c = model.getColors()[1];
                         } else if (colorAtPosition.equals(model.getColors()[2])) {
-                            c = SequencePartColor.instance().getColor("YELLOW");
+                            c = model.getColors()[2];
                         } else if (colorAtPosition.equals(model.getColors()[3])) {
-                            c = SequencePartColor.instance().getColor("BLUE");
+                            c = model.getColors()[3];
                         } else if (colorAtPosition.equals(model.getColors()[4])) {
-                            c = SequencePartColor.instance().getColor("ORANGE");
+                            c = model.getColors()[4];
                         } else if (colorAtPosition.equals(model.getColors()[5])) {
-                            c = SequencePartColor.instance().getColor("PINK");
+                            c = model.getColors()[5];
                         } else if (colorAtPosition.equals(model.getColors()[6])) {
-                            c = SequencePartColor.instance().getColor("LIGTHBLUE");
+                            c = model.getColors()[6];
                         }
-                        model.changeColor(c);
+                       // model.changeColor(c);
                         view.repaint();
 //                        colorChangeTimer.restart();
 //                        model.initColors();
@@ -322,6 +322,7 @@ public class Controller {
 
         if(color.equals(c)){
             if(!iterator.hasNext()){//terminó de introducir la secuencia correctamente
+                JOptionPane.showMessageDialog(view, "FELICIDADES!", "HAZ GANADO", JOptionPane.INFORMATION_MESSAGE);
                 win();
             }
         }else{//el color ingresado es incorrecto
