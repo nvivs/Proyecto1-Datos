@@ -1,19 +1,20 @@
 package Proyecto.MVC;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+import java.awt.image.BufferedImage;
 
 public class View extends JFrame {
     private Model panel;
+    private JButton newGameButton;
     private JButton startButton;
     private JLabel levelLabel;
     private JLabel scoreLabel;
-
+    private JLabel tiempo;
     private Timer timer;
+    private Timer count;
 
     public Model getPanel() {
         return panel;
@@ -31,16 +32,22 @@ public class View extends JFrame {
         add(panel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        startButton = new JButton("Iniciar");
+        newGameButton = new JButton("Reiniciar");
+        buttonPanel.add(newGameButton);
+        startButton = new JButton("Reproducir secuencia");
+        activaBotones();
         buttonPanel.add(startButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
         levelLabel = new JLabel(" Nivel: 1");
         scoreLabel = new JLabel(" Puntuación: 0");
+        tiempo = new JLabel(" Tiempo restante: 0");
 
         JPanel infoPanel = new JPanel(new GridLayout(2, 1));
         infoPanel.add(levelLabel);
         infoPanel.add(scoreLabel);
+        infoPanel.add(tiempo);
+
         add(infoPanel, BorderLayout.NORTH);
 
         // Configura el temporizador para mostrar los colores
@@ -50,12 +57,42 @@ public class View extends JFrame {
             }
         });
 
+        count = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+
         setVisible(true);
     }
 
+    public Color obtenerColorEnPosicion(int x, int y) throws Exception{
+        BufferedImage panelImage = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
+        panel.paint(panelImage.getGraphics());
+        return new Color(panelImage.getRGB(x, y));
+    }
+
+    public void setNewGameButtonListener(ActionListener listener) {
+        newGameButton.addActionListener(listener);
+    }
+
+    public void desactivaBotones(){
+        startButton.setEnabled(false);
+        startButton.setForeground(Color.BLACK);
+        startButton.setToolTipText(null);
+        newGameButton.setEnabled(false);
+        newGameButton.setToolTipText(null);
+    }
+
+    public void activaBotones(){
+        startButton.setEnabled(true);
+        startButton.setForeground(Color.RED);
+        startButton.setToolTipText("Presione para reproducir la secuencia");
+        newGameButton.setEnabled(true);
+        newGameButton.setToolTipText("Presione para reiniciar el juego");
+    }
+
     public void setStartButtonListener(ActionListener listener) {
-
-
         startButton.addActionListener(listener);
     }
 
@@ -67,6 +104,10 @@ public class View extends JFrame {
         timer.addActionListener(listener);
     }
 
+    public void setCountListener(ActionListener listener) {
+        count.addActionListener(listener);
+    }
+
     public void updateLevel(int level) {
         levelLabel.setText(" Nivel: " + level);
     }
@@ -75,11 +116,27 @@ public class View extends JFrame {
         scoreLabel.setText(" Puntuación: " + score);
     }
 
+    public JLabel getTiempo(){
+        return tiempo;
+    }
+
+    public void setTiempo(int tiempo){
+        this.tiempo.setText(" Tiempo restante: " + String.valueOf(tiempo));
+    }
+
     public void startTimer() {
         timer.start();
     }
 
     public void stopTimer() {
         timer.stop();
+    }
+
+    public void startCount() {
+        count.start();
+    }
+
+    public void stopCount() {
+        count.stop();
     }
 }

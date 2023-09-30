@@ -42,7 +42,7 @@ public class Sequence {
     public Sequence createSequence(int level) throws QueueException, UnsupportedAudioFileException, IOException {
         int index1;
         int index2;
-        this.updateSequenceLength(level + 1);
+        this.updateSequenceLength(level + 4);
         int x = 0;
         if(level <= 5) {// 4 colores
             x = 4;
@@ -55,7 +55,7 @@ public class Sequence {
         }
         int anterior = -1;
 
-        for(int i = 0; i < level; i++) {
+        for(int i = 0; i < level + 3; i++) {
             if(level < 5){
                 index1 = new Random().nextInt(x);
                 while(anterior == index1){

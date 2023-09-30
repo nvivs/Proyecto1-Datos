@@ -17,31 +17,39 @@ import java.util.Timer;
 import Proyecto.Util.Queue;
 
 public class Model extends JPanel {
-    private int currentIndex;
     private Color[] colors;
-    int tam;
+    private int tam;
+    private Boolean count;
+    private int countIndex;
 
-    public void setSequence(Sequence sequence) {
-        this.sequence = sequence;
+    public void reduce() {
+        this.countIndex--;
     }
 
-    Sequence sequence;
-    Random random;
-
-    public void setCurrentIndex(int currentIndex) {
-        this.currentIndex = currentIndex;
+    public void setCount(Boolean count) {
+        this.count = count;
     }
 
     public Model() {
-        this.colors = colors;
-        this.currentIndex = 0;
         tam = 4;
+        count = false;
+        countIndex = 3;
         initColors();
         repaint();
     }
 
-    public Sequence getSequence() {
-        return sequence;
+    public void updateLevel(int level){
+        if (level <= 5) {
+            tam = 4;
+        } else if (level <= 10) {
+            tam = 5;
+        } else if (level <= 15) {
+            tam = 6;
+        } else {
+            tam = 7;
+        }
+        initColors();
+        repaint();
     }
 
     public void initColors(){
@@ -53,6 +61,18 @@ public class Model extends JPanel {
                 new Color(255, 136, 0),
                 new Color(223, 0, 255),
                 new Color(0, 245, 255, 255)
+        };
+    }
+
+    public void grayColors(){
+        colors = new Color[]{
+                new Color(255, 165, 165, 255),
+                new Color(175, 255, 161),
+                new Color(255, 250, 159),
+                new Color(163, 181, 255),
+                new Color(255, 210, 166),
+                new Color(242, 165, 255),
+                new Color(161, 250, 255, 255)
         };
     }
 
@@ -74,16 +94,25 @@ public class Model extends JPanel {
         }
     }
 
-    public void showColor() {
-        currentIndex++;
-    }
-
     public void reset() {
         // Reinicia el panel
-        //setBackground(Color.WHITE);
         initColors();
-        currentIndex = 0;
+        tam = 4;
+        countIndex = 3;
+        count = false;
         repaint();
+    }
+
+    public int getCountIndex() {
+        return countIndex;
+    }
+
+    public Boolean getCount() {
+        return count;
+    }
+
+    public void setCountIndex(int countIndex) {
+        this.countIndex = countIndex;
     }
 
     public void paintComponent (Graphics bg){
@@ -101,14 +130,28 @@ public class Model extends JPanel {
         int s = (int) (0.80 * Math.min(getWidth(), getHeight()));
 
         int n = tam;
+        if(count) {
+            grayColors();
+            draw(g, cx, cy, s, n);
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("Arial", Font.PLAIN, 250));
+            FontMetrics metrics = g.getFontMetrics();
+            int x = (getWidth() - metrics.stringWidth(String.valueOf(countIndex))) / 2;
+            int y = (getHeight() - metrics.getHeight()) / 2 + metrics.getAscent();
+            g.drawString(String.valueOf(countIndex), x, y);
+            g.setColor(Color.GRAY.brighter().brighter().brighter().brighter());
+        }else{
+            draw(g, cx, cy, s, n);
+            g.setColor(Color.DARK_GRAY);
+        }
+    }
+
+    private void draw(Graphics2D g, int cx, int cy, int s, int n) {
         for (int i = 0; i < n; i++) {
             drawWedge(g, cx, cy, s, (i * 360 - 180) / n, 360 / n, colors[i]);
         }
-
-        g.setColor(Color.DARK_GRAY);
         g.fillOval(cx - s / 6, cy - s / 6, s / 3, s / 3);
     }
-
 
     private void drawWedge (Graphics2D g,int cx, int cy, int s, int start, int end, Color c){
 

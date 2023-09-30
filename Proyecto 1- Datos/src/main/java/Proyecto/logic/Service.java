@@ -33,6 +33,10 @@ public class Service {
         return data.getSequence();
     }
 
+    public Level getLevel(){
+        return data.getLevel();
+    }
+
     public Score getScore(){
         return data.getScore();
     }

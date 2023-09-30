@@ -16,4 +16,8 @@ public class Level {
         level += 1;
         return level;
     }
+
+    public void resetLevel(){
+        level = 1;
+    }
 }
