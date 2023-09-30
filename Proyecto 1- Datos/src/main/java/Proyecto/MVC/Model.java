@@ -38,6 +38,10 @@ public class Model extends JPanel {
         repaint();
     }
 
+    public Color[] getColors() {
+        return colors;
+    }
+
     public void updateLevel(int level){
         if (level <= 5) {
             tam = 4;
@@ -100,6 +104,13 @@ public class Model extends JPanel {
         tam = 4;
         countIndex = 3;
         count = false;
+        repaint();
+    }
+
+    public void format(){
+        initColors();
+        setCountIndex(3);
+        setCount(false);
         repaint();
     }
 

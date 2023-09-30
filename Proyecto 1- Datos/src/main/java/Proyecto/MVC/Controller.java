@@ -1,10 +1,7 @@
 package Proyecto.MVC;
 
 import Proyecto.Util.QueueException;
-import Proyecto.logic.Level;
-import Proyecto.logic.Score;
-import Proyecto.logic.SequencePart;
-import Proyecto.logic.Service;
+import Proyecto.logic.*;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
@@ -30,6 +27,7 @@ public class Controller {
     Thread thread;
     JOptionPane pane;
     Boolean running;
+    Timer colorChangeTimer;
 
     public Controller(Model model, View view) {
         this.model = model;
@@ -102,15 +100,57 @@ public class Controller {
             }
         });
 
+        colorChangeTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Detener el temporizador
+                colorChangeTimer.stop();
+            }
+        });
+        colorChangeTimer.setRepeats(false); // Detener el temporizador después de una ejecución
+
+
         view.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int x = evt.getX();
                 int y = evt.getY();
                 Color colorAtPosition;
+                Color c = null;
+                boolean valid = false;
+
                 try {
                     colorAtPosition = view.obtenerColorEnPosicion(x, y);
-                    check(colorAtPosition);
+
+                    for(int i = 0; i < model.getColors().length; i++){
+                        if(model.getColors()[i].equals(colorAtPosition)){
+                            valid = true;
+                            break;
+                        }
+                    }
+                    if(valid) {
+                        if (colorAtPosition.equals(model.getColors()[0])) {
+                            c = SequencePartColor.instance().getColor("RED");
+                        } else if (colorAtPosition.equals(model.getColors()[1])) {
+                            c = SequencePartColor.instance().getColor("GREEN");
+                        } else if (colorAtPosition.equals(model.getColors()[2])) {
+                            c = SequencePartColor.instance().getColor("YELLOW");
+                        } else if (colorAtPosition.equals(model.getColors()[3])) {
+                            c = SequencePartColor.instance().getColor("BLUE");
+                        } else if (colorAtPosition.equals(model.getColors()[4])) {
+                            c = SequencePartColor.instance().getColor("ORANGE");
+                        } else if (colorAtPosition.equals(model.getColors()[5])) {
+                            c = SequencePartColor.instance().getColor("PINK");
+                        } else if (colorAtPosition.equals(model.getColors()[6])) {
+                            c = SequencePartColor.instance().getColor("LIGTHBLUE");
+                        }
+                        model.changeColor(c);
+                        view.repaint();
+//                        colorChangeTimer.restart();
+//                        model.initColors();
+//                        view.repaint();
+                        check(colorAtPosition);
+                    }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -146,7 +186,7 @@ public class Controller {
 //            }
 //        }else {
         // Muestra el siguiente color en la secuencia
-            model.reset();
+            model.format();
             if (iterator.hasNext()) {
                 model.changeColor(iterator.next().getColor());
                 view.repaint();
@@ -161,6 +201,7 @@ public class Controller {
                 view.activaBotones();
                 model.setCount(true);
                 view.startCount();
+                iterator = Service.instance().getSequence().getSequence().iterator();
             }
         //}
     }
@@ -172,6 +213,7 @@ public class Controller {
     }
 
     public void reestart(){
+        detieneTemporizador();
         score.resetScore();
         level.resetLevel();
         model.reset();
@@ -259,11 +301,26 @@ public class Controller {
         view.setTiempo(0);
     }
 
-    public void check(Color color) throws QueueException, UnsupportedAudioFileException, IOException, InterruptedException {
-        iterator = Service.instance().getSequence().getSequence().iterator();
-
+    public void check(Color color){
         Color expectedColor = iterator.next().getColor();
-        if(color.equals(expectedColor)){
+        Color c = null;
+        if(expectedColor.equals(SequencePartColor.instance().getColor("RED"))){
+            c = model.getColors()[0];
+        }else if(expectedColor.equals(SequencePartColor.instance().getColor("GREEN"))){
+            c = model.getColors()[1];
+        }else if(expectedColor.equals(SequencePartColor.instance().getColor("YELLOW"))){
+            c = model.getColors()[2];
+        }else if(expectedColor.equals(SequencePartColor.instance().getColor("BLUE"))){
+            c = model.getColors()[3];
+        }else if(expectedColor.equals(SequencePartColor.instance().getColor("ORANGE"))){
+            c = model.getColors()[4];
+        }else if(expectedColor.equals(SequencePartColor.instance().getColor("PINK"))){
+            c = model.getColors()[5];
+        }else if(expectedColor.equals(SequencePartColor.instance().getColor("LIGTHBLUE"))){
+            c = model.getColors()[6];
+        }
+
+        if(color.equals(c)){
             if(!iterator.hasNext()){//terminó de introducir la secuencia correctamente
                 win();
             }
