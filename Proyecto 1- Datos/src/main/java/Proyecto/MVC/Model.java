@@ -1,10 +1,8 @@
 package Proyecto.MVC;
-
 import Proyecto.Util.QueueException;
 import Proyecto.logic.Sequence;
 import Proyecto.logic.SequencePartColor;
 import Proyecto.logic.Service;
-
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
@@ -93,8 +91,8 @@ public class Model extends JPanel {
             colors[4] = SequencePartColor.instance().getColor("ORANGE");
         }else if(color.equals(SequencePartColor.instance().getColor("PINK"))){
             colors[5] = SequencePartColor.instance().getColor("PINK");
-        }else if(color.equals(SequencePartColor.instance().getColor("LIGTHBLUE"))){
-            colors[6] = SequencePartColor.instance().getColor("LIGTHBLUE");
+        }else if(color.equals(SequencePartColor.instance().getColor("LIGHTBLUE"))){
+            colors[6] = SequencePartColor.instance().getColor("LIGHTBLUE");
         }
     }
 
@@ -144,8 +142,8 @@ public class Model extends JPanel {
         if(count) {
             grayColors();
             draw(g, cx, cy, s, n);
-            g.setColor(Color.BLACK);
-            g.setFont(new Font("Arial", Font.PLAIN, 250));
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.BOLD, 130));
             FontMetrics metrics = g.getFontMetrics();
             int x = (getWidth() - metrics.stringWidth(String.valueOf(countIndex))) / 2;
             int y = (getHeight() - metrics.getHeight()) / 2 + metrics.getAscent();
@@ -159,7 +157,7 @@ public class Model extends JPanel {
 
     private void draw(Graphics2D g, int cx, int cy, int s, int n) {
         for (int i = 0; i < n; i++) {
-            drawWedge(g, cx, cy, s, (i * 360 - 180) / n, 360 / n, colors[i]);
+            drawWedge(g, cx, cy, s, (i * 360 / n), 360 / n, colors[i]);
         }
         g.fillOval(cx - s / 6, cy - s / 6, s / 3, s / 3);
     }

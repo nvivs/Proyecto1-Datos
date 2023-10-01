@@ -1,8 +1,6 @@
 package Proyecto.MVC;
-
 import Proyecto.Util.QueueException;
 import Proyecto.logic.*;
-
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +10,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
 import java.util.Iterator;
-
 import static java.lang.Thread.sleep;
 
 public class Controller {
@@ -28,7 +25,8 @@ public class Controller {
     JOptionPane pane;
     Boolean running;
     Timer colorChangeTimer;
-
+    Icon check = new ImageIcon("C:/Users/julyr/OneDrive/Escritorio/Proyecto1-Datos/Proyecto 1- Datos/src/main/resources/check.png");
+    Icon x = new ImageIcon("C:/Users/julyr/OneDrive/Escritorio/Proyecto1-Datos/Proyecto 1- Datos/src/main/resources/x.png");
     public Controller(Model model, View view) {
         this.model = model;
         this.view = view;
@@ -128,28 +126,78 @@ public class Controller {
                             break;
                         }
                     }
+
                     if(valid) {
                         if (colorAtPosition.equals(model.getColors()[0])) {
-                            c = model.getColors()[0];
+                           model.getColors()[0] = SequencePartColor.instance().getColor("RED");
+                           view.addMouseListener(new java.awt.event.MouseAdapter() {
+                               @Override
+                               public void mouseReleased(java.awt.event.MouseEvent evt) {
+                                   model.getColors()[0] = new Color(255, 0, 0);
+                               }
+                           });
+                            colorAtPosition = SequencePartColor.instance().getColor("RED");
                         } else if (colorAtPosition.equals(model.getColors()[1])) {
-                            c = model.getColors()[1];
+                            model.getColors()[1] = SequencePartColor.instance().getColor("GREEN");
+                            view.addMouseListener(new java.awt.event.MouseAdapter() {
+                                @Override
+                                public void mouseReleased(java.awt.event.MouseEvent evt) {
+                                    model.getColors()[1] = new Color(33, 255, 0);
+                                }
+                            });
+                            colorAtPosition = SequencePartColor.instance().getColor("GREEN");
                         } else if (colorAtPosition.equals(model.getColors()[2])) {
-                            c = model.getColors()[2];
+                            model.getColors()[2] = SequencePartColor.instance().getColor("YELLOW");
+                            view.addMouseListener(new java.awt.event.MouseAdapter() {
+                                @Override
+                                public void mouseReleased(java.awt.event.MouseEvent evt) {
+                                    model.getColors()[2] = new Color(255, 243, 0);
+                                }
+                            });
+                            colorAtPosition = SequencePartColor.instance().getColor("YELLOW");
                         } else if (colorAtPosition.equals(model.getColors()[3])) {
-                            c = model.getColors()[3];
+                            model.getColors()[3] = SequencePartColor.instance().getColor("BLUE");
+                            view.addMouseListener(new java.awt.event.MouseAdapter() {
+                                @Override
+                                public void mouseReleased(java.awt.event.MouseEvent evt) {
+                                    model.getColors()[3] = new Color(0, 42, 255);
+                                }
+                            });
+                            colorAtPosition = SequencePartColor.instance().getColor("BLUE");
                         } else if (colorAtPosition.equals(model.getColors()[4])) {
-                            c = model.getColors()[4];
+                            model.getColors()[4] = SequencePartColor.instance().getColor("ORANGE");
+                            view.addMouseListener(new java.awt.event.MouseAdapter() {
+                                @Override
+                                public void mouseReleased(java.awt.event.MouseEvent evt) {
+                                    model.getColors()[4] = new Color(255, 136, 0);
+                                }
+                            });
+                            colorAtPosition = SequencePartColor.instance().getColor("ORANGE");
                         } else if (colorAtPosition.equals(model.getColors()[5])) {
-                            c = model.getColors()[5];
+                            model.getColors()[5] = SequencePartColor.instance().getColor("PINK");
+                            view.addMouseListener(new java.awt.event.MouseAdapter() {
+                                @Override
+                                public void mouseReleased(java.awt.event.MouseEvent evt) {
+                                    model.getColors()[5] = new Color(223, 0, 255);
+                                }
+                            });
+                            colorAtPosition = SequencePartColor.instance().getColor("PINK");
                         } else if (colorAtPosition.equals(model.getColors()[6])) {
-                            c = model.getColors()[6];
+                            model.getColors()[6] = SequencePartColor.instance().getColor("LIGHTBLUE");
+                            view.addMouseListener(new java.awt.event.MouseAdapter() {
+                                @Override
+                                public void mouseReleased(java.awt.event.MouseEvent evt) {
+                                    model.getColors()[6] = new Color(0, 245, 255, 255);
+                                }
+                            });
+                            colorAtPosition = SequencePartColor.instance().getColor("LIGHTBLUE");
                         }
                        // model.changeColor(c);
                         view.repaint();
-//                        colorChangeTimer.restart();
-//                        model.initColors();
-//                        view.repaint();
                         check(colorAtPosition);
+                        //colorChangeTimer.restart();
+                       //model.initColors();
+                        //view.repaint();
                     }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -255,7 +303,7 @@ public class Controller {
 //                    throw new RuntimeException(e);
 //                }
 //                if (i == 0) {
-//                    JOptionPane.showMessageDialog(view, "TE HAZ QUEDADO SIN TIEMPO", "HAZ PERDIDO", JOptionPane.INFORMATION_MESSAGE);
+//                    JOptionPane.showMessageDialog(view, "TE HAS QUEDADO SIN TIEMPO", "HAS PERDIDO", JOptionPane.INFORMATION_MESSAGE);
 //                    pane.addComponentListener(new ComponentAdapter() {
 //                        @Override
 //                        public void componentHidden(ComponentEvent e) {
@@ -281,7 +329,7 @@ public class Controller {
                         throw new RuntimeException(e);
                     }
                     if (i == 0) {
-                        JOptionPane.showMessageDialog(view, "TE HAZ QUEDADO SIN TIEMPO", "HAZ PERDIDO", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(view, "TE HAS QUEDADO SIN TIEMPO", "HAS PERDIDO", JOptionPane.ERROR_MESSAGE, x);
                         pane.addComponentListener(new ComponentAdapter() {
                             @Override
                             public void componentHidden(ComponentEvent e) {
@@ -316,17 +364,18 @@ public class Controller {
             c = model.getColors()[4];
         }else if(expectedColor.equals(SequencePartColor.instance().getColor("PINK"))){
             c = model.getColors()[5];
-        }else if(expectedColor.equals(SequencePartColor.instance().getColor("LIGTHBLUE"))){
+        }else if(expectedColor.equals(SequencePartColor.instance().getColor("LIGHTBLUE"))){
             c = model.getColors()[6];
         }
 
         if(color.equals(c)){
             if(!iterator.hasNext()){//terminó de introducir la secuencia correctamente
-                JOptionPane.showMessageDialog(view, "FELICIDADES!", "HAZ GANADO", JOptionPane.INFORMATION_MESSAGE);
+                detieneTemporizador();
+                JOptionPane.showMessageDialog(view, "FELICIDADES!", "HAS GANADO", JOptionPane.INFORMATION_MESSAGE, check);
                 win();
             }
         }else{//el color ingresado es incorrecto
-            JOptionPane.showMessageDialog(view, "COLOR INCORRECTO", "HAZ PERDIDO", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(view, "COLOR INCORRECTO", "HAS PERDIDO", JOptionPane.ERROR_MESSAGE, x);
             fail();
         }
     }

@@ -13,7 +13,7 @@ public class SequencePartColor<T>  {
     private final Color YELLOW;
     private final Color ORANGE;
     private final Color PINK;
-    private final Color LIGTHBLUE;
+    private final Color LIGHTBLUE;
     private static SequencePartColor instance;
     Map<String, Color> codigos = new HashMap<>();
 
@@ -29,14 +29,14 @@ public class SequencePartColor<T>  {
         YELLOW = new Color(180, 172, 35);
         ORANGE = new Color(176, 89, 36, 255);
         PINK = new Color(168, 28, 138, 255);
-        LIGTHBLUE = new Color(17, 132, 141, 255);
+        LIGHTBLUE = new Color(17, 132, 141, 255);
         codigos.put("RED", RED);
         codigos.put("BLUE", BLUE);
         codigos.put("GREEN", GREEN);
         codigos.put("YELLOW", YELLOW);
         codigos.put("ORANGE", ORANGE);
         codigos.put("PINK", PINK);
-        codigos.put("LIGTHBLUE", LIGTHBLUE);
+        codigos.put("LIGHTBLUE", LIGHTBLUE);
     }
 
     public Color getColor(String cod) {
@@ -55,7 +55,7 @@ public class SequencePartColor<T>  {
             case 3 -> BLUE;
             case 4 -> ORANGE;
             case 5 -> PINK;
-            case 6 -> LIGTHBLUE;
+            case 6 -> LIGHTBLUE;
             default -> null;
         };
     }
@@ -84,7 +84,7 @@ public class SequencePartColor<T>  {
         return PINK;
     }
 
-    public Color getLIGTHBLUE() {
-        return LIGTHBLUE;
+    public Color getLIGHTBLUE() {
+        return LIGHTBLUE;
     }
 }

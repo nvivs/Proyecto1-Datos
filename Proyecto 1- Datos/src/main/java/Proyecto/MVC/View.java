@@ -15,14 +15,14 @@ public class View extends JFrame {
     private JLabel tiempo;
     private Timer timer;
     private Timer count;
-
     public Model getPanel() {
         return panel;
     }
 
     public View() {
 
-        setTitle("Simon Dice");
+        setTitle("Simon");
+        setIconImage(new ImageIcon("C:/Users/julyr/OneDrive/Escritorio/Proyecto1-Datos/Proyecto 1- Datos/src/main/resources/simon.png").getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 400);
         setLayout(new BorderLayout());
@@ -86,9 +86,10 @@ public class View extends JFrame {
 
     public void activaBotones(){
         startButton.setEnabled(true);
-        startButton.setForeground(Color.RED);
+        startButton.setBackground(new Color(36,187,72));
         startButton.setToolTipText("Presione para reproducir la secuencia");
         newGameButton.setEnabled(true);
+        newGameButton.setBackground(new Color(180,46,46));
         newGameButton.setToolTipText("Presione para reiniciar el juego");
     }
 

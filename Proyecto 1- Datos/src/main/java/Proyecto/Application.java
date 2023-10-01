@@ -5,6 +5,7 @@ import Proyecto.Util.QueueException;
 import Proyecto.data.Data;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
@@ -41,6 +42,10 @@ public class Application {
 //            // Inicia la secuencia del juego
 //            controller.playSequence();
 //        });
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        }
+        catch (Exception ignored) {};
 
         View view = new View();
        //view.setPanel(new Model());
