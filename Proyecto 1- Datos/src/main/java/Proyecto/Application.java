@@ -2,13 +2,10 @@ package Proyecto;
 
 import Proyecto.MVC.*;
 import Proyecto.Util.QueueException;
-import Proyecto.data.Data;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
-import java.util.List;
 
 public class Application {
     public static void main(String[] args) throws UnsupportedAudioFileException, QueueException, IOException, InterruptedException {
@@ -49,7 +46,7 @@ public class Application {
 
         View view = new View();
        //view.setPanel(new Model());
-        Controller controller = new Controller(view.getPanel(), view);
+        Controller controller = new Controller(view.getModel(), view);
 
         view.setVisible(true);
     }

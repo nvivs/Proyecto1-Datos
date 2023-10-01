@@ -1,24 +1,20 @@
 package Proyecto.MVC;
-import Proyecto.Util.QueueException;
-import Proyecto.logic.Sequence;
+import Proyecto.logic.BestScore;
+import Proyecto.logic.Level;
+import Proyecto.logic.Score;
 import Proyecto.logic.SequencePartColor;
-import Proyecto.logic.Service;
-import javax.sound.sampled.UnsupportedAudioFileException;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.Timer;
-import Proyecto.Util.Queue;
 
 public class Model extends JPanel {
     private Color[] colors;
     private int tam;
     private Boolean count;
     private int countIndex;
+    private Score score;
+    private Level level;
+    private BestScore maxScore;
 
     public void reduce() {
         this.countIndex--;
@@ -34,18 +30,66 @@ public class Model extends JPanel {
         countIndex = 3;
         initColors();
         repaint();
+        score = new Score();
+        level = new Level();
+        maxScore = new BestScore();
+    }
+
+    public void resetScore(){
+        score.resetScore();
+    }
+
+    public void resetLevel(){
+        level.resetLevel();
+    }
+
+    public BestScore getMaxScore() {
+        return maxScore;
+    }
+
+    public void setMaxScore(BestScore maxScore) {
+        this.maxScore = maxScore;
+    }
+
+    public void init(Level level, BestScore maxScores){
+        this.level = level;
+        this.maxScore = maxScores;
+    }
+
+    public void increaseLevel(){
+        level.increase();
+    }
+
+    public void updateScore(int totalTime, int timeSpend){
+        score.updateScore(totalTime, timeSpend);
+    }
+
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
     }
 
     public Color[] getColors() {
         return colors;
     }
 
-    public void updateLevel(int level){
-        if (level <= 5) {
+    public void updateTam(){
+        if (level.getLevel() <= 5) {
             tam = 4;
-        } else if (level <= 10) {
+        } else if (level.getLevel() <= 10) {
             tam = 5;
-        } else if (level <= 15) {
+        } else if (level.getLevel() <= 15) {
             tam = 6;
         } else {
             tam = 7;
@@ -103,6 +147,9 @@ public class Model extends JPanel {
         countIndex = 3;
         count = false;
         repaint();
+        score.resetScore();
+        level.resetLevel();
+        maxScore = new BestScore();
     }
 
     public void format(){

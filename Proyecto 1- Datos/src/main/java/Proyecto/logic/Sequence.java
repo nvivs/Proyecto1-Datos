@@ -4,8 +4,6 @@ import Proyecto.Util.Queue;
 import Proyecto.Util.QueueException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Sequence {
@@ -42,7 +40,7 @@ public class Sequence {
     public Sequence createSequence(int level) throws QueueException, UnsupportedAudioFileException, IOException {
         int index1;
         int index2;
-        this.updateSequenceLength(level + 4);
+        this.updateSequenceLength(level + 1);
         int x = 0;
         if(level <= 5) {// 4 colores
             x = 4;
@@ -55,7 +53,7 @@ public class Sequence {
         }
         int anterior = -1;
 
-        for(int i = 0; i < level + 3; i++) {
+        for(int i = 0; i < level; i++) {
             if(level < 5){
                 index1 = new Random().nextInt(x);
                 while(anterior == index1){

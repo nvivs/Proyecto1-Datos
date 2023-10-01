@@ -1,5 +1,6 @@
 package Proyecto.data;
 
+import Proyecto.logic.BestScore;
 import Proyecto.logic.Level;
 import Proyecto.logic.Score;
 import Proyecto.logic.Sequence;
@@ -7,12 +8,12 @@ import Proyecto.logic.Sequence;
 public class Data {
     private Sequence sequence;
     private Level level;
-    private Score score;
+    private BestScore scores;
 
     public Data() {
         sequence = new Sequence();
         level = new Level();
-        score = new Score();
+        scores = new BestScore();
     }
 
     public Sequence getSequence() {
@@ -23,7 +24,7 @@ public class Data {
         return level;
     }
 
-    public Score getScore() {
-        return score;
+    public BestScore getScores() {
+        return scores;
     }
 }

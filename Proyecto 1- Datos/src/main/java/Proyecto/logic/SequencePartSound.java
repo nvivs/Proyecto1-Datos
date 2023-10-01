@@ -31,10 +31,13 @@ public class SequencePartSound {
 
     public AudioInputStream getSound(int i) {
         return switch (i) {
-            case 1 -> RED;
-            case 2 -> BLUE;
-            case 3 -> GREEN;
-            case 4 -> YELLOW;
+            case 0 -> RED;
+            case 1 -> GREEN;
+            case 2 -> YELLOW;
+            case 3 -> BLUE;
+//            case 4 -> ORANGE;
+//            case 5 -> PINK;
+//            case 6 -> LIGHTBLUE;
             default -> null;
         };
     }

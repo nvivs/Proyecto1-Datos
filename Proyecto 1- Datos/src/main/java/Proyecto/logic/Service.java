@@ -37,8 +37,8 @@ public class Service {
         return data.getLevel();
     }
 
-    public Score getScore(){
-        return data.getScore();
+    public BestScore getScores(){
+        return data.getScores();
     }
 
     public void check(Color color) throws Exception {
@@ -56,7 +56,7 @@ public class Service {
         return data.getLevel().increase();
     }
 
-    public int updateScore(int totalTime, int timeSpend){
-        return data.getScore().updateScore(totalTime, timeSpend);
+    public BestScore updateScores(Score score){
+        return data.getScores().add(score);
     }
 }
