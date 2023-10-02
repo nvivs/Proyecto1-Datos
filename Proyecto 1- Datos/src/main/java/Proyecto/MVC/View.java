@@ -224,16 +224,14 @@ public class View extends JFrame {
     }
 
     public void updateMejoresPuntuaciones(BestScore b){
-        String p1 = "0";
-        String p2 = "0";
-        String p3 = "0";
-        try{
-            p1 = String.valueOf(b.getScores().get(0).getScore());
-            p2 = String.valueOf(b.getScores().get(1).getScore());
-            p3 = String.valueOf(b.getScores().get(2).getScore());
-        }catch (Exception e){
+        String p1;
+        String p2;
+        String p3;
 
-        }
+        p1 = String.valueOf(b.get(0).getScore());
+        p2 = String.valueOf(b.get(1).getScore());
+        p3 = String.valueOf(b.get(2).getScore());
+
         numero1.setText("#1: " + p1);
         numero2.setText("#2: " + p2);
         numero3.setText("#3: " + p3);
