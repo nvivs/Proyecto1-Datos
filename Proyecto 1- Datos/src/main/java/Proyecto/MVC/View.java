@@ -130,6 +130,7 @@ public class View extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (model.getCount()) {
+                    controller.setPlayerTurn(false);
                     if(model.getCountIndex() > 1){
                         model.reduce();
                     }else{
@@ -142,6 +143,7 @@ public class View extends JFrame {
                     repaint();
                     controller.setRunning(true);
                     controller.iniciaTemporizador();
+                    controller.setPlayerTurn(true);
                 }
                 repaint();
             }
