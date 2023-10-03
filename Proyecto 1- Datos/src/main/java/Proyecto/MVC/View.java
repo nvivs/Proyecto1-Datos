@@ -89,12 +89,7 @@ public class View extends JFrame {
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    controller.reestart();
-                    controller.startGame();
-                } catch (UnsupportedAudioFileException | QueueException | IOException | InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
+                controller.reestart();
             }
         });
 
@@ -118,7 +113,7 @@ public class View extends JFrame {
                     stopTimer();
                 } else {
                     try {
-                        //controller.sound();
+                        controller.sound(0);
                         controller.showNextColor();
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);

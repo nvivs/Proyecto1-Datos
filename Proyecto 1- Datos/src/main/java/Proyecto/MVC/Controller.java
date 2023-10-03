@@ -28,7 +28,7 @@ public class Controller {
     SequencePart part;
     Clip clip;
 
-    public Controller(Model model, View view) throws LineUnavailableException {
+    public Controller(Model model, View view) throws LineUnavailableException, UnsupportedAudioFileException, IOException {
         this.model = model;
         this.view = view;
         model.init(Service.instance().getLevel(),
@@ -41,7 +41,6 @@ public class Controller {
         pane = new JOptionPane();
         view.activaNewGame();
         view.activaStart();
-        clip = AudioSystem.getClip();
     }
 
     public Color cambiaColorClickeado(Color colorAtPosition){
@@ -109,19 +108,25 @@ public class Controller {
         setTiempoRestante();
     }
 
-    public void sound(){
+    public void sound(int i){
         try {
             if (clip != null) {
                 clip.close(); // Cerrar el Clip anterior si existe
             }
             clip = AudioSystem.getClip();
-            clip.open(part.getSound());
+            if(i == 0) {
+                clip.open(part.getSound());
+            }else{
+                clip.open(SequencePartSound.instance().getSound(i));
+            }
             clip.start();
             Thread.sleep(clip.getMicrosecondLength() / 1000);
         } catch (IOException
                  | InterruptedException
                  | LineUnavailableException ex) {
             System.err.printf("Excepción: '%s'%n", ex.getMessage());
+        } catch (UnsupportedAudioFileException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -144,17 +149,11 @@ public class Controller {
         }
     }
 
-    public void fail(){
-        // Reiniciar el modelo y la vista
+    public void reestart(){
         detieneTemporizador();
         Service.instance().updateScores(model.getScore());
         model.setMaxScore(Service.instance().getScores());
         view.updateMejoresPuntuaciones(model.getMaxScore());
-        reestart();
-    }
-
-    public void reestart(){
-        detieneTemporizador();
         model.resetScore();
         model.resetLevel();
         model.reset();
@@ -209,26 +208,13 @@ public class Controller {
                         throw new RuntimeException(e);
                     }
                     if (i == 0) {
-                        try {
-//                            if (clip != null) {
-//                                clip.close(); // Cerrar el Clip anterior si existe
-//                            }
-                            clip.open(SequencePartSound.instance().getSound(8));
-                            clip.start();
-                            Thread.sleep(clip.getMicrosecondLength() / 1000);
-                            clip.close();
-                        } catch (IOException
-                                 | InterruptedException
-                                 | LineUnavailableException
-                                 | UnsupportedAudioFileException ex) {
-                            System.err.printf("Excepción: '%s'%n", ex.getMessage());
-                        }
+                        sound(8);
                         JOptionPane.showMessageDialog(view, "TE HAS QUEDADO SIN TIEMPO", "HAS PERDIDO", JOptionPane.ERROR_MESSAGE, x);
                         pane.addComponentListener(new ComponentAdapter() {
                             @Override
                             public void componentHidden(ComponentEvent e) {
                                 super.componentHidden(e);
-                                fail();
+                                reestart();
                             }
                         });
                     }
@@ -266,41 +252,14 @@ public class Controller {
             if (!iterator.hasNext()) {
                 // terminó de introducir la secuencia correctamente
                 detieneTemporizador();
-                try {
-//                    if (clip != null) {
-//                        clip.close(); // Cerrar el Clip anterior si existe
-//                    }
-//                    clip = AudioSystem.getClip();
-                    clip.open(SequencePartSound.instance().getSound(7));
-                    clip.start();
-                    Thread.sleep(clip.getMicrosecondLength() / 1000);
-                    clip.close();
-                } catch (IOException
-                         | InterruptedException
-                         | LineUnavailableException
-                         | UnsupportedAudioFileException ex) {
-                    System.err.printf("Excepción: '%s'%n", ex.getMessage());
-                }
+                sound(7);
                 JOptionPane.showMessageDialog(view, "FELICIDADES!", "HAS GANADO", JOptionPane.INFORMATION_MESSAGE, check);
                 win();
             }
         }else{//el color ingresado es incorrecto
-            try {
-                if (clip != null) {
-                    clip.close(); // Cerrar el Clip anterior si existe
-                }
-                clip = AudioSystem.getClip();
-                clip.open(SequencePartSound.instance().getSound(8));
-                clip.start();
-                Thread.sleep(clip.getMicrosecondLength() / 1000);
-            } catch (IOException
-                     | InterruptedException
-                     | LineUnavailableException
-                     | UnsupportedAudioFileException ex) {
-                System.err.printf("Excepción: '%s'%n", ex.getMessage());
-            }
+            sound(8);
             JOptionPane.showMessageDialog(view, "COLOR INCORRECTO", "HAS PERDIDO", JOptionPane.ERROR_MESSAGE, x);
-            fail();
+            reestart();
         }
     }
 
