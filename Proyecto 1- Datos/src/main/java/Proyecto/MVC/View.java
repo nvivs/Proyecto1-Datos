@@ -118,6 +118,7 @@ public class View extends JFrame {
                     stopTimer();
                 } else {
                     try {
+                        //controller.sound();
                         controller.showNextColor();
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);

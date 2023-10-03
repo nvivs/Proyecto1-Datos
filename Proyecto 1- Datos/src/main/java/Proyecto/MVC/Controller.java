@@ -25,8 +25,10 @@ public class Controller {
     Boolean running;
     Icon check = new ImageIcon("/src/main/resources/check.png");
     Icon x = new ImageIcon("/src/main/resources/x.png");
+    SequencePart part;
+    Clip clip;
 
-    public Controller(Model model, View view) {
+    public Controller(Model model, View view) throws LineUnavailableException {
         this.model = model;
         this.view = view;
         model.init(Service.instance().getLevel(),
@@ -39,30 +41,31 @@ public class Controller {
         pane = new JOptionPane();
         view.activaNewGame();
         view.activaStart();
+        clip = AudioSystem.getClip();
     }
 
     public Color cambiaColorClickeado(Color colorAtPosition){
         if (colorAtPosition.equals(model.getColors()[0])) {
             colorAtPosition = SequencePartColor.instance().getColor("RED");
-            cambiaColorClickeado(colorAtPosition);
+            model.changeColor(colorAtPosition);
         } else if (colorAtPosition.equals(model.getColors()[1])) {
             colorAtPosition = SequencePartColor.instance().getColor("GREEN");
-            cambiaColorClickeado(colorAtPosition);
+            model.changeColor(colorAtPosition);
         } else if (colorAtPosition.equals(model.getColors()[2])) {
             colorAtPosition = SequencePartColor.instance().getColor("YELLOW");
-            cambiaColorClickeado(colorAtPosition);
+            model.changeColor(colorAtPosition);
         } else if (colorAtPosition.equals(model.getColors()[3])) {
             colorAtPosition = SequencePartColor.instance().getColor("BLUE");
-            cambiaColorClickeado(colorAtPosition);
+            model.changeColor(colorAtPosition);
         } else if (colorAtPosition.equals(model.getColors()[4])) {
             colorAtPosition = SequencePartColor.instance().getColor("ORANGE");
-            cambiaColorClickeado(colorAtPosition);
+            model.changeColor(colorAtPosition);
         } else if (colorAtPosition.equals(model.getColors()[5])) {
             colorAtPosition = SequencePartColor.instance().getColor("PINK");
-            cambiaColorClickeado(colorAtPosition);
+            model.changeColor(colorAtPosition);
         } else if (colorAtPosition.equals(model.getColors()[6])) {
             colorAtPosition = SequencePartColor.instance().getColor("LIGHTBLUE");
-            cambiaColorClickeado(colorAtPosition);
+            model.changeColor(colorAtPosition);
         }
         model.changeColor(colorAtPosition);
         view.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -106,25 +109,29 @@ public class Controller {
         setTiempoRestante();
     }
 
+    public void sound(){
+        try {
+            if (clip != null) {
+                clip.close(); // Cerrar el Clip anterior si existe
+            }
+            clip = AudioSystem.getClip();
+            clip.open(part.getSound());
+            clip.start();
+            Thread.sleep(clip.getMicrosecondLength() / 1000);
+        } catch (IOException
+                 | InterruptedException
+                 | LineUnavailableException ex) {
+            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+        }
+    }
+
     public void showNextColor() throws InterruptedException {
         // Muestra el siguiente color en la secuencia
         model.format();
         if (iterator.hasNext()) {
-            SequencePart part = iterator.next();
+            part = iterator.next();
             model.changeColor(part.getColor());
             view.repaint();
-
-//            try (Clip clip = AudioSystem.getClip()) {
-//                clip.open(part.getSound());
-//
-//                clip.start();
-//                Thread.sleep(clip.getMicrosecondLength() / 1_000);
-//            } catch (IOException
-//                     | InterruptedException
-//                     | LineUnavailableException ex) {
-//                System.err.printf("Excepción: '%s'%n", ex.getMessage());
-//            }
-
         } else {
             // La secuencia ha sido mostrada, es el turno del jugador
             model.initColors();
@@ -202,6 +209,20 @@ public class Controller {
                         throw new RuntimeException(e);
                     }
                     if (i == 0) {
+                        try {
+//                            if (clip != null) {
+//                                clip.close(); // Cerrar el Clip anterior si existe
+//                            }
+                            clip.open(SequencePartSound.instance().getSound(8));
+                            clip.start();
+                            Thread.sleep(clip.getMicrosecondLength() / 1000);
+                            clip.close();
+                        } catch (IOException
+                                 | InterruptedException
+                                 | LineUnavailableException
+                                 | UnsupportedAudioFileException ex) {
+                            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+                        }
                         JOptionPane.showMessageDialog(view, "TE HAS QUEDADO SIN TIEMPO", "HAS PERDIDO", JOptionPane.ERROR_MESSAGE, x);
                         pane.addComponentListener(new ComponentAdapter() {
                             @Override
@@ -242,12 +263,42 @@ public class Controller {
         }
 
         if(color.equals(c)){
-            if(!iterator.hasNext()){//terminó de introducir la secuencia correctamente
+            if (!iterator.hasNext()) {
+                // terminó de introducir la secuencia correctamente
                 detieneTemporizador();
+                try {
+//                    if (clip != null) {
+//                        clip.close(); // Cerrar el Clip anterior si existe
+//                    }
+//                    clip = AudioSystem.getClip();
+                    clip.open(SequencePartSound.instance().getSound(7));
+                    clip.start();
+                    Thread.sleep(clip.getMicrosecondLength() / 1000);
+                    clip.close();
+                } catch (IOException
+                         | InterruptedException
+                         | LineUnavailableException
+                         | UnsupportedAudioFileException ex) {
+                    System.err.printf("Excepción: '%s'%n", ex.getMessage());
+                }
                 JOptionPane.showMessageDialog(view, "FELICIDADES!", "HAS GANADO", JOptionPane.INFORMATION_MESSAGE, check);
                 win();
             }
         }else{//el color ingresado es incorrecto
+            try {
+                if (clip != null) {
+                    clip.close(); // Cerrar el Clip anterior si existe
+                }
+                clip = AudioSystem.getClip();
+                clip.open(SequencePartSound.instance().getSound(8));
+                clip.start();
+                Thread.sleep(clip.getMicrosecondLength() / 1000);
+            } catch (IOException
+                     | InterruptedException
+                     | LineUnavailableException
+                     | UnsupportedAudioFileException ex) {
+                System.err.printf("Excepción: '%s'%n", ex.getMessage());
+            }
             JOptionPane.showMessageDialog(view, "COLOR INCORRECTO", "HAS PERDIDO", JOptionPane.ERROR_MESSAGE, x);
             fail();
         }

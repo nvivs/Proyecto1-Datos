@@ -3,12 +3,13 @@ package Proyecto;
 import Proyecto.MVC.*;
 import Proyecto.Util.QueueException;
 
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.io.IOException;
 
 public class Application {
-    public static void main(String[] args) throws UnsupportedAudioFileException, QueueException, IOException, InterruptedException {
+    public static void main(String[] args) throws UnsupportedAudioFileException, QueueException, IOException, InterruptedException, LineUnavailableException {
 //        JFrame window = new JFrame();
 //        Model model = new Model();
 //        SimonGameView view = new SimonGameView();
