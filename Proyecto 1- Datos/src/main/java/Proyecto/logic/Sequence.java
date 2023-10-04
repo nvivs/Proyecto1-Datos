@@ -2,6 +2,8 @@ package Proyecto.logic;
 
 import Proyecto.Util.Queue;
 import Proyecto.Util.QueueException;
+
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.Random;
@@ -37,7 +39,7 @@ public class Sequence {
         this.index = index;
     }
 
-    public Sequence createSequence(int level) throws QueueException, UnsupportedAudioFileException, IOException {
+    public Sequence createSequence(int level) throws QueueException, UnsupportedAudioFileException, IOException, LineUnavailableException {
         int index1;
         int index2;
         this.updateSequenceLength(level + 1);
@@ -51,26 +53,31 @@ public class Sequence {
         }else if(level > 15){// 7 colores
             x = 7;
         }
-        int anterior = -1;
+        int anterior1 = -1;
+        int anterior2 = -1;
 
         for(int i = 0; i < level; i++) {
             if(level < 5){
                 index1 = new Random().nextInt(x);
-                while(anterior == index1){
+                while(anterior1 == index1){
                     index1 = new Random().nextInt(x);
                 }
                 index2 = index1;
             }else{
                 index1 = new Random().nextInt(x);
-                while(anterior == index1){
+                index2 = new Random().nextInt(x);
+                while(anterior1 == index1){
                     index1 = new Random().nextInt(x);
                 }
-                index2 = new Random().nextInt(x);
+                while(anterior2 == index2){
+                    index2 = new Random().nextInt(x);
+                }
             }
             sequence.enqueue(new SequencePart
                     (SequencePartColor.instance().getColor(index1)
                             , SequencePartSound.instance().getSound(index2)));
-            anterior = index1;
+            anterior1 = index1;
+            anterior2 = index2;
         }
        // index = index1;
         return this;

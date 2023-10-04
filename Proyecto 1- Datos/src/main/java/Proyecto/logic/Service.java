@@ -3,6 +3,7 @@ package Proyecto.logic;
 import Proyecto.Util.QueueException;
 import Proyecto.data.Data;
 
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class Service {
         data = new Data();
     }
 
-    public Sequence createSequence() throws UnsupportedAudioFileException, QueueException, IOException {
+    public Sequence createSequence() throws UnsupportedAudioFileException, QueueException, IOException, LineUnavailableException {
         return data.getSequence().createSequence(data.getLevel().getLevel());
     }
 

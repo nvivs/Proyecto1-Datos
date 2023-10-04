@@ -5,6 +5,7 @@ import Proyecto.logic.BestScore;
 import Proyecto.logic.Level;
 import Proyecto.logic.Score;
 
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
@@ -98,7 +99,8 @@ public class View extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     controller.startGame();
-                } catch (UnsupportedAudioFileException | QueueException | IOException | InterruptedException ex) {
+                } catch (UnsupportedAudioFileException | QueueException | IOException | InterruptedException |
+                         LineUnavailableException ex) {
                     throw new RuntimeException(ex);
                 }
             }

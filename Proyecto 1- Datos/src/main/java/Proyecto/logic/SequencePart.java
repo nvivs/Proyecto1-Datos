@@ -1,14 +1,15 @@
 package Proyecto.logic;
 
 import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 
 public class SequencePart {
     private Color color;
-    private AudioInputStream sound;
+    private Clip sound;
 
-    public SequencePart(Color color, AudioInputStream sound) {
+    public SequencePart(Color color, Clip sound) {
         this.color = color;
         this.sound = sound;
     }
@@ -17,7 +18,7 @@ public class SequencePart {
         return color;
     }
 
-    public AudioInputStream getSound() {
+    public Clip getSound() {
         return sound;
     }
 }

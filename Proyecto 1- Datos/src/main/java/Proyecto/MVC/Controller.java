@@ -26,7 +26,6 @@ public class Controller {
     Icon check = new ImageIcon("/src/main/resources/check.png");
     Icon x = new ImageIcon("/src/main/resources/x.png");
     SequencePart part;
-    Clip clip;
 
     public Controller(Model model, View view) throws LineUnavailableException, UnsupportedAudioFileException, IOException {
         this.model = model;
@@ -76,7 +75,7 @@ public class Controller {
         return colorAtPosition;
     }
 
-    public void startGame() throws UnsupportedAudioFileException, QueueException, IOException, InterruptedException {
+    public void startGame() throws UnsupportedAudioFileException, QueueException, IOException, InterruptedException, LineUnavailableException {
         view.desactivaStart();
         createSequence();
 
@@ -102,7 +101,7 @@ public class Controller {
         return running;
     }
 
-    private void createSequence() throws UnsupportedAudioFileException, QueueException, IOException {
+    private void createSequence() throws UnsupportedAudioFileException, QueueException, IOException, LineUnavailableException {
         Service.instance().getSequence().createSequence(model.getLevel().getLevel());
         iterator = Service.instance().getSequence().getSequence().iterator();
         setTiempoRestante();
@@ -110,23 +109,16 @@ public class Controller {
 
     public void sound(int i){
         try {
-            if (clip != null) {
-                clip.close(); // Cerrar el Clip anterior si existe
-            }
-            clip = AudioSystem.getClip();
             if(i == 0) {
-                clip.open(part.getSound());
+                part.getSound().setMicrosecondPosition(0);
+                part.getSound().start();
             }else{
-                clip.open(SequencePartSound.instance().getSound(i));
+                SequencePartSound.instance().getSound(i).setMicrosecondPosition(0);
+                SequencePartSound.instance().getSound(i).start();
             }
-            clip.start();
-            Thread.sleep(clip.getMicrosecondLength() / 1000);
-        } catch (IOException
-                 | InterruptedException
-                 | LineUnavailableException ex) {
+            Thread.sleep(SequencePartSound.instance().getSound(i).getMicrosecondLength() / 750);
+        } catch (InterruptedException | UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
             System.err.printf("Excepción: '%s'%n", ex.getMessage());
-        } catch (UnsupportedAudioFileException e) {
-            throw new RuntimeException(e);
         }
     }
 
