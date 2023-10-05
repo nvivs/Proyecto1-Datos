@@ -10,7 +10,12 @@ import java.util.Random;
 
 public class Sequence {
     private Queue<SequencePart> sequence;
-    private int index;
+    private static Sequence instance;
+
+    public static Sequence instance(){
+        if (instance == null) instance = new Sequence();
+        return instance;
+    }
 
     public Sequence(Queue<SequencePart> sequence) {
         this.sequence = sequence;
@@ -22,21 +27,6 @@ public class Sequence {
 
     public Queue<SequencePart> getSequence() {
         return sequence;
-    }
-
-    public int getSize(){
-        return sequence.count();
-    }
-    public void setSequence(Queue<SequencePart> sequence) {
-        this.sequence = sequence;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
     }
 
     public Sequence createSequence(int level) throws QueueException, UnsupportedAudioFileException, IOException, LineUnavailableException {
@@ -79,7 +69,6 @@ public class Sequence {
             anterior1 = index1;
             anterior2 = index2;
         }
-       // index = index1;
         return this;
     }
 

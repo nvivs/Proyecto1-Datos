@@ -1,11 +1,11 @@
 package Proyecto.logic;
 
 import Proyecto.Util.QueueException;
+import Proyecto.Util.XmlPersister;
 import Proyecto.data.Data;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import java.awt.*;
 import java.io.IOException;
 
 public class Service {
@@ -18,20 +18,32 @@ public class Service {
         return theInstance;
     }
 
-    public Data getData() {
-        return data;
+    private Service(){
+        try{
+            data = XmlPersister.instance().load();
+        }catch (Exception e) {
+            data = new Data();
+        }
     }
 
-    private Service(){
-        data = new Data();
+    public void stop(){
+        try{
+            XmlPersister.instance().store(data);
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     public Sequence createSequence() throws UnsupportedAudioFileException, QueueException, IOException, LineUnavailableException {
-        return data.getSequence().createSequence(data.getLevel().getLevel());
+        return Sequence.instance().createSequence(data.getLevel().getLevel());
     }
 
-    public Sequence getSequence() {
-        return data.getSequence();
+    public int getTotalTime(){
+        return data.getTotalTime();
+    }
+
+    public int getReproductionTime(){
+        return data.getReproductionTime();
     }
 
     public Level getLevel(){
@@ -42,22 +54,27 @@ public class Service {
         return data.getScores();
     }
 
-    public void check(Color color) throws Exception {
-        if(data.getSequence().getSequence().head().getColor() == color){//si el color seleccionado coincide con
-            data.getSequence().getSequence().dequeue();// la cabeza del queue
-        }else {
-            throw new Exception();// si falló
-        }
-        if(data.getSequence().getSequence().isEmpty()){// si llegó al final de la lista
-            throw new QueueException();
-        }
-    }
-
-    public int increaseLevel(){
+    public Level increaseLevel(){
         return data.getLevel().increase();
     }
 
-    public BestScore updateScores(Score score){
-        return data.getScores().add(score);
+    public Level resetLevel(){
+        return data.getLevel().resetLevel();
+    }
+
+    public BestScore updateScores(){
+        return data.getScores().add(data.getScore());
+    }
+
+    public Score getScore(){
+        return data.getScore();
+    }
+
+    public Score updateScore(int totalTime, int timeSpend){
+        return data.getScore().updateScore(totalTime, timeSpend);
+    }
+
+    public Score resetScore(){
+        return data.getScore().resetScore();
     }
 }

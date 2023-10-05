@@ -1,28 +1,22 @@
 package Proyecto.logic;
 
-public class BestScore {
-    private Score[] scores;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
 
-    public BestScore(Score[] scores) {
-        this.scores = scores;
-        for(int i = 0; i < 3; i++){
-            this.scores[i] = new Score();
-        }
-    }
+@XmlAccessorType(XmlAccessType.FIELD)
+public class BestScore {
+
+    @XmlElementWrapper(name = "scores")
+    @XmlElement(name = "score")
+    private Score[] scores;
 
     public BestScore() {
         scores = new Score[3];
         for(int i = 0; i < 3; i++){
             this.scores[i] = new Score();
         }
-    }
-
-    public Score[] getScores() {
-        return scores;
-    }
-
-    public void setScores(Score[] scores) {
-        this.scores = scores;
     }
 
     public BestScore add(Score data) { // O(n)
@@ -52,7 +46,7 @@ public class BestScore {
                     swapped = true;
                 }
             }
-            n--; // Reduce the array size for optimization
+            n--;
         } while (swapped);
     }
 }

@@ -35,14 +35,6 @@ public class Model extends JPanel {
         maxScore = new BestScore();
     }
 
-    public void resetScore(){
-        score.resetScore();
-    }
-
-    public void resetLevel(){
-        level.resetLevel();
-    }
-
     public BestScore getMaxScore() {
         return maxScore;
     }
@@ -51,17 +43,10 @@ public class Model extends JPanel {
         this.maxScore = maxScore;
     }
 
-    public void init(Level level, BestScore maxScores){
+    public void init(Level level, BestScore maxScores, Score score){
         this.level = level;
         this.maxScore = maxScores;
-    }
-
-    public void increaseLevel(){
-        level.increase();
-    }
-
-    public void updateScore(int totalTime, int timeSpend){
-        score.updateScore(totalTime, timeSpend);
+        this.score = score;
     }
 
     public Score getScore() {
@@ -143,15 +128,15 @@ public class Model extends JPanel {
        }
     }
 
-    public void reset() {
+    public void reset(Score score, Level level) {
         // Reinicia el panel
         initColors();
         tam = 4;
         countIndex = 3;
         count = false;
         repaint();
-        score.resetScore();
-        level.resetLevel();
+        this.score = score;
+        this.level = level;
         maxScore = new BestScore();
     }
 

@@ -2,17 +2,12 @@ package Proyecto.MVC;
 
 import Proyecto.Util.QueueException;
 import Proyecto.logic.BestScore;
-import Proyecto.logic.Level;
-import Proyecto.logic.Score;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -25,7 +20,6 @@ public class View extends JFrame {
     private JLabel tiempo;
     private Timer timer;
     private Timer count;
-    private int level;
     private Controller controller;
     private JLabel numero1;
     private JLabel numero2;
@@ -169,12 +163,8 @@ public class View extends JFrame {
 
                         if (valid) {
                             colorAtPosition = controller.cambiaColorClickeado(colorAtPosition);
-                            // model.changeColor(c);
                             repaint();
                             controller.check(colorAtPosition);
-                            //colorChangeTimer.restart();
-                            //model.initColors();
-                            //view.repaint();
                         }
                     } catch (Exception e) {
                         throw new RuntimeException(e);
@@ -182,10 +172,26 @@ public class View extends JFrame {
                 }
             }
         });
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if(confirmClose()) {
+                    super.windowClosing(e);
+                    controller.exit();
+                }
+            }
+        });
     }
 
-    public Controller getController() {
-        return controller;
+    public boolean confirmClose() {
+        Object[] options = {"Guardar y Salir", "Salir sin guardar"};
+        return JOptionPane.showOptionDialog(this,
+                "¿Desea guardar su progreso?", "Confirmación",
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null,
+                options, // texto de los botones
+                options[0] // opción por defecto
+        ) == JOptionPane.OK_OPTION;
     }
 
     public void setController(Controller controller) {
@@ -198,26 +204,10 @@ public class View extends JFrame {
 
 
     public int tiempoDeReproduccion(){
-        if (level == 1) {
-            return 1700;
-        } else if (level <= 4) {
-            return 1500;
-        } else if (level <= 7) {
-            return 1300;
-        } else if (level <= 10) {
-            return 1100;
-        } else if (level <= 13) {
-            return 900;
-        } else if (level <= 15) {
-            return 700;
-        } else if (level > 15) {
-            return 500;
-        }else {
-            return 1000;
-        }
+        return controller == null? 30 : controller.getReproductionTime();
     }
 
-    public Color obtenerColorEnPosicion(int x, int y) throws Exception{
+    public Color obtenerColorEnPosicion(int x, int y){
         BufferedImage panelImage = new BufferedImage(model.getWidth(), model.getHeight(), BufferedImage.TYPE_INT_RGB);
         model.paint(panelImage.getGraphics());
         return new Color(panelImage.getRGB(x, y));
@@ -235,11 +225,6 @@ public class View extends JFrame {
         numero1.setText("#1: " + p1);
         numero2.setText("#2: " + p2);
         numero3.setText("#3: " + p3);
-    }
-
-    public void desactivaNewGame(){
-        newGameButton.setEnabled(false);
-        newGameButton.setToolTipText(null);
     }
 
     public void activaNewGame(){
@@ -267,19 +252,14 @@ public class View extends JFrame {
 
     public void updateLevel(int level) {
         levelLabel.setText(" Nivel: " + level);
-        this.level = level;
     }
 
     public void updateScore(int score) {
         scoreLabel.setText(" Puntuación: " + score);
     }
 
-    public JLabel getTiempo(){
-        return tiempo;
-    }
-
     public void setTiempo(int tiempo){
-        this.tiempo.setText(" Tiempo restante: " + String.valueOf(tiempo));
+        this.tiempo.setText(" Tiempo restante: " + tiempo);
     }
 
     public void startTimer() {

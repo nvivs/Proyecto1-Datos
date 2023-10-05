@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<data>
+    <level>
+        <level>2</level>
+    </level>
+    <bestScores>
+        <scores>
+            <score>
+                <score>230</score>
+            </score>
+            <score>
+                <score>0</score>
+            </score>
+            <score>
+                <score>0</score>
+            </score>
+        </scores>
+    </bestScores>
+    <actualScore>
+        <score>115</score>
+    </actualScore>
+    <tiempoRestante>30</tiempoRestante>
+    <tiempoDeReproduccion>1000</tiempoDeReproduccion>
+</data>

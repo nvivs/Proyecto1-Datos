@@ -3,8 +3,6 @@ package Proyecto.logic;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import Proyecto.Util.Queue;
 
 public class SequencePartColor<T>  {
     private final Color RED;
@@ -58,33 +56,5 @@ public class SequencePartColor<T>  {
             case 6 -> LIGHTBLUE;
             default -> null;
         };
-    }
-
-    public Color getRED() {
-        return RED;
-    }
-
-    public Color getBLUE() {
-        return BLUE;
-    }
-
-    public Color getGREEN() {
-        return GREEN;
-    }
-
-    public Color getYELLOW() {
-        return YELLOW;
-    }
-
-    public Color getORANGE() {
-        return ORANGE;
-    }
-
-    public Color getPINK() {
-        return PINK;
-    }
-
-    public Color getLIGHTBLUE() {
-        return LIGHTBLUE;
     }
 }
