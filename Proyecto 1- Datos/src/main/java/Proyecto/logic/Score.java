@@ -22,12 +22,13 @@ public class Score {
     public int updateScore(int totalTime, int timeSpend){
         score += 100;
         float x = (float) totalTime / 4;//un cuarto de tiempo total
+        int time = totalTime - timeSpend;
 
-        if(timeSpend < Math.pow(x, 3)){// si duró menos de 3/4 del tiempo total
+        if(time > x * 3){// si duró menos de 3/4 del tiempo total
             score += 15;
-        }else if(timeSpend < Math.pow(x, 2)){// si duró menos de la mitad del tiempo total
+        }else if(time > x * 2){// si duró menos de la mitad del tiempo total
             score += 10;
-        }else if(timeSpend < x){// si duró menos de 1 cuarto del tiempo total
+        }else if(time > x){// si duró menos de 1 cuarto del tiempo total
             score += 5;
         }
         return score;

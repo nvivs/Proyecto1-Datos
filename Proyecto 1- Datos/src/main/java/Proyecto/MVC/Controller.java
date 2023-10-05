@@ -14,12 +14,10 @@ import static java.lang.Thread.sleep;
 public class Controller {
     private Model model;
     private View view;
-    //private Level level;
-    //private Score score;
     private boolean playerTurn;
     private Iterator<SequencePart> iterator;
-    private int tiempoRestante;
-    private int tiempoTotal;
+    private int totalTime;
+    private int timeSpend;
     Thread thread;
     JOptionPane pane;
     Boolean running;
@@ -27,15 +25,13 @@ public class Controller {
     Icon x = new ImageIcon("/src/main/resources/x.png");
     SequencePart part;
 
-    public Controller(Model model, View view) throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+    public Controller(Model model, View view) {
         this.model = model;
         this.view = view;
         model.init(Service.instance().getLevel(),
                 Service.instance().getScores());
         view.setModel(model);
         view.setController(this);
-        //this.level = Service.instance().getLevel();
-        //score = Service.instance().getScore();
         this.playerTurn = false;
         pane = new JOptionPane();
         view.activaNewGame();
@@ -97,10 +93,6 @@ public class Controller {
         this.running = running;
     }
 
-    public Boolean getRunning() {
-        return running;
-    }
-
     private void createSequence() throws UnsupportedAudioFileException, QueueException, IOException, LineUnavailableException {
         Service.instance().getSequence().createSequence(model.getLevel().getLevel());
         iterator = Service.instance().getSequence().getSequence().iterator();
@@ -157,7 +149,7 @@ public class Controller {
 
     public void win(){
         detieneTemporizador();
-        model.updateScore(tiempoRestante, tiempoTotal);
+        model.updateScore(totalTime, timeSpend);
         model.increaseLevel();
         model.updateTam();
         view.updateLevel(model.getLevel().getLevel());
@@ -168,19 +160,19 @@ public class Controller {
 
     public void setTiempoRestante(){
         if (model.getLevel().getLevel() == 1) {
-            tiempoRestante = 30;
+            totalTime = 30;
         } else if (model.getLevel().getLevel() <= 4) {
-            tiempoRestante = 25;
+            totalTime = 25;
         } else if (model.getLevel().getLevel() <= 7) {
-            tiempoRestante = 20;
+            totalTime = 20;
         } else if (model.getLevel().getLevel() <= 10) {
-            tiempoRestante = 15;
+            totalTime = 15;
         } else if (model.getLevel().getLevel() <= 13) {
-            tiempoRestante = 10;
+            totalTime = 10;
         } else if (model.getLevel().getLevel() <= 15) {
-            tiempoRestante = 5;
+            totalTime = 5;
         } else if (model.getLevel().getLevel() > 15) {
-            tiempoRestante = 2;
+            totalTime = 2;
         }
     }
 
@@ -188,12 +180,12 @@ public class Controller {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = tiempoRestante; i >= 0; i--) {
+                for (int i = totalTime; i >= 0; i--) {
                     if(!running){
                         break;
                     }
                     view.setTiempo(i);
-                    tiempoTotal = tiempoRestante - i;
+                    timeSpend = totalTime - i;
                     try {
                         sleep(1000);
                     } catch (InterruptedException e) {
