@@ -5,5 +5,7 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="sun.xml.bind.jaxb.core" level="project" />
+    <orderEntry type="library" name="jakarta.xml.bind.api" level="project" />
   </component>
 </module>

@@ -106,7 +106,8 @@ public class Model extends JPanel {
                 new Color(0, 42, 255),
                 new Color(255, 136, 0),
                 new Color(223, 0, 255),
-                new Color(0, 245, 255, 255)
+                new Color(0, 245, 255, 255),
+                new Color(255,255,255,255)
         };
     }
 
@@ -137,7 +138,9 @@ public class Model extends JPanel {
             colors[5] = SequencePartColor.instance().getColor("PINK");
         }else if(color.equals(SequencePartColor.instance().getColor("LIGHTBLUE"))){
             colors[6] = SequencePartColor.instance().getColor("LIGHTBLUE");
-        }
+        }else if (color.equals(SequencePartColor.instance().getColor("WHITE"))){
+            colors[7] = SequencePartColor.instance().getColor("WHITE");
+       }
     }
 
     public void reset() {

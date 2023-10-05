@@ -1,6 +1,9 @@
 package Proyecto.MVC;
+import Proyecto.Util.PathUtils;
 import Proyecto.Util.QueueException;
+import Proyecto.data.Configuration;
 import Proyecto.logic.*;
+import jakarta.xml.bind.JAXBException;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -8,6 +11,8 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 import static java.lang.Thread.sleep;
 
@@ -17,6 +22,7 @@ public class Controller {
     private boolean playerTurn;
     private Iterator<SequencePart> iterator;
     private int totalTime;
+//   Configuration configuration;
     private int timeSpend;
     Thread thread;
     JOptionPane pane;
@@ -25,7 +31,8 @@ public class Controller {
     Icon x = new ImageIcon("/src/main/resources/x.png");
     SequencePart part;
 
-    public Controller(Model model, View view) {
+    public Controller(Model model, View view) //throws JAXBException
+     {
         this.model = model;
         this.view = view;
         model.init(Service.instance().getLevel(),
@@ -36,6 +43,29 @@ public class Controller {
         pane = new JOptionPane();
         view.activaNewGame();
         view.activaStart();
+        //CONFIGURATION FILE
+       /* try{
+            Configuration configuration = PathUtils.loadConfiguration("Configuration.xml");
+
+        }catch (JAXBException e){
+            //e.printStackTrace();
+            List<Integer> defaultTimes = new ArrayList<>();
+            int defaultTime = 30; // Cambia 30 al valor deseado
+            int max = model.getLevel().getLevel();
+            for (int i = 0; i < max; i++) {
+                defaultTimes.add(defaultTime);
+            }
+
+            configuration = new Configuration();
+            configuration.setLevelTimes(defaultTimes);
+
+            // Guarda la configuración en un archivo XML
+            PathUtils.saveConfiguration("Configuration.xml", configuration);
+        }
+        List<Integer> levelTimes = configuration.getLevelTimes();
+        int timeForCurrentLevel = levelTimes.get(model.getLevel().getLevel() - 1);
+
+        */
     }
 
     public Color cambiaColorClickeado(Color colorAtPosition){
@@ -159,7 +189,7 @@ public class Controller {
     }
 
     public void setTiempoRestante(){
-        if (model.getLevel().getLevel() == 1) {
+       if (model.getLevel().getLevel() == 1) {
             totalTime = 30;
         } else if (model.getLevel().getLevel() <= 4) {
             totalTime = 25;
@@ -174,6 +204,16 @@ public class Controller {
         } else if (model.getLevel().getLevel() > 15) {
             totalTime = 2;
         }
+      /*  List<Integer> levelTimes = this.configuration.getLevelTimes();
+        int currentLevel = model.getLevel().getLevel();
+
+        if (currentLevel >= 1 && currentLevel <= levelTimes.size()) {
+            totalTime = levelTimes.get(currentLevel - 1);
+        } else {
+            totalTime = 30; // o cualquier otro valor predeterminado que desees
+        }
+
+       */
     }
 
     public void iniciaTemporizador() {
