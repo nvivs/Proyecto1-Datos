@@ -3,7 +3,6 @@ package Proyecto.logic;
 import Proyecto.Util.QueueException;
 import Proyecto.Util.XmlPersister;
 import Proyecto.data.Data;
-
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;

@@ -2,7 +2,6 @@ package Proyecto.logic;
 
 import Proyecto.Util.Queue;
 import Proyecto.Util.QueueException;
-
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;

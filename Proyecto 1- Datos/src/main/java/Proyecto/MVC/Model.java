@@ -1,9 +1,9 @@
 package Proyecto.MVC;
+
 import Proyecto.logic.BestScore;
 import Proyecto.logic.Level;
 import Proyecto.logic.Score;
 import Proyecto.logic.SequencePartColor;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -108,7 +108,7 @@ public class Model extends JPanel {
         };
     }
 
-   public void changeColor(Color color) {
+    public void changeColor(Color color) {
         if(color.equals(SequencePartColor.instance().getColor("RED"))){
             colors[0] = SequencePartColor.instance().getColor("RED");
         }else if(color.equals(SequencePartColor.instance().getColor("GREEN"))){

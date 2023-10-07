@@ -1,3 +1,16 @@
+/*
+ *  Derek Rojas Mendoza
+ *  604740973
+ *  Nicole
+ *
+ *  Julian
+ *
+ *  Universidad Nacional de Costa Rica
+ *  Escuela de informatica
+ *
+ *  Proyecto 1
+ *  Fecha de entrega: 08/10/2023
+ */
 package Proyecto;
 
 import Proyecto.MVC.Controller;

@@ -22,8 +22,8 @@ public class Controller {
     Thread thread;
     JOptionPane pane;
     Boolean running;
-    Icon check = new ImageIcon("/src/main/resources/check.png");
-    Icon x = new ImageIcon("/src/main/resources/x.png");
+    Icon check = new ImageIcon("/check.png");
+    Icon x = new ImageIcon("/x.png");
     SequencePart part;
     private int reproductionTime;
 
@@ -38,11 +38,7 @@ public class Controller {
         this.view.setController(this);
         this.playerTurn = false;
         pane = new JOptionPane();
-        this.view.activaNewGame();
-        this.view.activaStart();
-        this.view.updateLevel(model.getLevel().getLevel());
-        this.view.updateMejoresPuntuaciones(model.getMaxScore());
-        this.view.updateScore(model.getScore().getScore());
+       this.view.setup();
     }
 
     public int getReproductionTime() {
@@ -245,5 +241,4 @@ public class Controller {
             reestart();
         }
     }
-
 }

@@ -39,7 +39,6 @@ public class BestScore {
             swapped = false;
             for (int i = 1; i < n; i++) {
                 if (scores[i - 1].getScore() < scores[i].getScore()) {
-                    // Swap elements[i-1] and elements[i]
                     Score temp = scores[i - 1];
                     scores[i - 1] = scores[i];
                     scores[i] = temp;

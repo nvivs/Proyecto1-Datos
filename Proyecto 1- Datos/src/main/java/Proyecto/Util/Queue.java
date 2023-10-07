@@ -2,6 +2,18 @@ package Proyecto.Util;
 
 import java.util.Iterator;
 
+/**
+ * -------------------------------------------------------------------
+ *
+ * (c) 2023
+ *
+ * @author Georges Alfaro S.
+ * @version 1.0.0 2023-08-15
+ *
+ * --------------------------------------------------------------------
+ * @param <T>
+ */
+
 public class Queue<T> implements Iterable<T> {
 
     private static final int MAX_QUEUE = 10;

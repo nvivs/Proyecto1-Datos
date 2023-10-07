@@ -2,7 +2,6 @@ package Proyecto.MVC;
 
 import Proyecto.Util.QueueException;
 import Proyecto.logic.BestScore;
-
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
@@ -28,7 +27,7 @@ public class View extends JFrame {
     public View() {
 
         setTitle("Simon");
-        setIconImage(new ImageIcon("C:/Users/julyr/OneDrive/Escritorio/Proyecto1-Datos/Proyecto 1- Datos/src/main/resources/simon.png").getImage());
+        setIconImage(new ImageIcon("/simon.png").getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 1000);
         setLayout(new BorderLayout());
@@ -225,6 +224,14 @@ public class View extends JFrame {
         numero1.setText("#1: " + p1);
         numero2.setText("#2: " + p2);
         numero3.setText("#3: " + p3);
+    }
+
+    public void setup(){
+        activaNewGame();
+        activaStart();
+        updateLevel(model.getLevel().getLevel());
+        updateMejoresPuntuaciones(model.getMaxScore());
+        updateScore(model.getScore().getScore());
     }
 
     public void activaNewGame(){

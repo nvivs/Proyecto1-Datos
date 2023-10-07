@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SequencePartColor<T>  {
+public class SequencePartColor  {
     private final Color RED;
     private final Color BLUE;
     private final Color GREEN;
