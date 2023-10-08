@@ -1,7 +1,9 @@
 package Proyecto.MVC;
 
+import Proyecto.Util.Configuration;
 import Proyecto.Util.QueueException;
 import Proyecto.logic.BestScore;
+
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
@@ -26,7 +28,8 @@ public class View extends JFrame {
 
     public View() {
 
-        setTitle("Simon");
+        setVisible(false);
+        setTitle("Simon Says");
         setIconImage(new ImageIcon("/simon.png").getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 1000);
@@ -77,13 +80,11 @@ public class View extends JFrame {
             }
         });
 
-        setVisible(true);
-
         // Configura el controlador para el botón "Iniciar"
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.reestart();
+                controller.restart();
             }
         });
 
@@ -135,6 +136,7 @@ public class View extends JFrame {
                     controller.setRunning(true);
                     controller.iniciaTemporizador();
                     controller.setPlayerTurn(true);
+                    activaNewGame();
                 }
                 repaint();
             }
@@ -181,6 +183,47 @@ public class View extends JFrame {
                 }
             }
         });
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                updateWindowConfiguration();
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                updateWindowConfiguration();
+            }
+
+        });
+    }
+
+    private void getWindowConfiguration() {
+        Configuration cfg = controller.getConfiguration();
+
+        try {
+            int w = Integer.parseInt(cfg.getProperty("window_width"));
+            int h = Integer.parseInt(cfg.getProperty("window_height"));
+            setSize(w, h);
+
+            int x = Integer.parseInt(cfg.getProperty("window_x"));
+            int y = Integer.parseInt(cfg.getProperty("window_y"));
+            setLocation(new Point(x, y));
+
+        } catch (NumberFormatException ex) {
+            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+        }
+
+    }
+
+    private void updateWindowConfiguration() {
+        Configuration cfg = controller.getConfiguration();
+        cfg.setProperty("window_width", String.valueOf(getWidth()));
+        cfg.setProperty("window_height", String.valueOf(getHeight()));
+
+        cfg.setProperty("window_x", String.valueOf(getLocation().x));
+        cfg.setProperty("window_y", String.valueOf(getLocation().y));
+        cfg.setUpdated(true);
     }
 
     public boolean confirmClose() {
@@ -227,17 +270,25 @@ public class View extends JFrame {
     }
 
     public void setup(){
+        getWindowConfiguration();
         activaNewGame();
         activaStart();
         updateLevel(model.getLevel().getLevel());
         updateMejoresPuntuaciones(model.getMaxScore());
         updateScore(model.getScore().getScore());
+        setVisible(true);
     }
 
     public void activaNewGame(){
         newGameButton.setEnabled(true);
         newGameButton.setBackground(new Color(180,46,46));
         newGameButton.setToolTipText("Presione para reiniciar el juego");
+    }
+
+    public void desactivaNewGame(){
+        newGameButton.setEnabled(false);
+        newGameButton.setForeground(Color.BLACK);
+        newGameButton.setToolTipText(null);
     }
 
     public void activaStart(){
@@ -255,6 +306,10 @@ public class View extends JFrame {
 
     public void setModel(Model model) {
         this.model = model;
+    }
+
+    public void sinTiempo(){
+        JOptionPane.showMessageDialog(this, "TE HAS QUEDADO SIN TIEMPO", "HAS PERDIDO", JOptionPane.ERROR_MESSAGE, controller.getX());
     }
 
     public void updateLevel(int level) {

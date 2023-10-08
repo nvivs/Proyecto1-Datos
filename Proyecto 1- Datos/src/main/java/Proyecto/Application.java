@@ -15,18 +15,24 @@ package Proyecto;
 
 import Proyecto.MVC.Controller;
 import Proyecto.MVC.View;
-
+import Proyecto.Util.Configuration;
 import javax.swing.*;
 
 public class Application {
+
+    private static Configuration configuration;
+
     public static void main(String[] args){
+        configuration = Configuration.getInstance();
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         }
         catch (Exception ignored) {};
 
         View view = new View();
-        Controller controller = new Controller(view.getModel(), view);
+        SwingUtilities.invokeLater(() -> {
+            Controller controller = new Controller(view.getModel(), view, configuration);
+        });
 
         view.setVisible(true);
     }

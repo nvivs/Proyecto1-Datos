@@ -1,15 +1,16 @@
 package Proyecto.MVC;
 
+import Proyecto.Util.Configuration;
 import Proyecto.Util.QueueException;
 import Proyecto.logic.*;
+
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.io.IOException;
 import java.util.Iterator;
+
 import static java.lang.Thread.sleep;
 
 public class Controller {
@@ -20,14 +21,15 @@ public class Controller {
     private int totalTime;
     private int timeSpend;
     Thread thread;
-    JOptionPane pane;
     Boolean running;
     Icon check = new ImageIcon("/check.png");
     Icon x = new ImageIcon("/x.png");
     SequencePart part;
     private int reproductionTime;
+    private final Configuration configuration;
 
-    public Controller(Model model, View view){
+    public Controller(Model model, View view, Configuration configuration){
+        this.configuration = configuration;
         this.model = model;
         this.view = view;
         model.init(Service.instance().getLevel(),
@@ -37,8 +39,7 @@ public class Controller {
         this.view.setModel(model);
         this.view.setController(this);
         this.playerTurn = false;
-        pane = new JOptionPane();
-       this.view.setup();
+        this.view.setup();
     }
 
     public int getReproductionTime() {
@@ -80,6 +81,7 @@ public class Controller {
 
     public void startGame() throws UnsupportedAudioFileException, QueueException, IOException, InterruptedException, LineUnavailableException {
         view.desactivaStart();
+        view.desactivaNewGame();
         createSequence();
 
         // Comenzar a mostrar la secuencia
@@ -140,8 +142,9 @@ public class Controller {
         }
     }
 
-    public void reestart(){
+    public void restart(){
         detieneTemporizador();
+        totalTime = Service.instance().setTotalTime(31);
         Service.instance().updateScores();
         model.setMaxScore(Service.instance().getScores());
         view.updateMejoresPuntuaciones(model.getMaxScore());
@@ -153,7 +156,11 @@ public class Controller {
     }
 
     public void exit(){
+        if (getConfiguration().isUpdated()) {
+            getConfiguration().saveConfiguration();
+        }
         Service.instance().stop();
+        System.exit(0);
     }
 
     public void win(){
@@ -188,19 +195,17 @@ public class Controller {
                     }
                     if (i == 0) {
                         sound(8);
-                        JOptionPane.showMessageDialog(view, "TE HAS QUEDADO SIN TIEMPO", "HAS PERDIDO", JOptionPane.ERROR_MESSAGE, x);
-                        pane.addComponentListener(new ComponentAdapter() {
-                            @Override
-                            public void componentHidden(ComponentEvent e) {
-                                super.componentHidden(e);
-                                reestart();
-                            }
-                        });
+                        view.sinTiempo();
+                        restart();
                     }
                 }
             }
         });
         thread.start();
+    }
+
+    public Icon getX(){
+        return x;
     }
 
     public void detieneTemporizador(){
@@ -238,7 +243,12 @@ public class Controller {
         }else{//el color ingresado es incorrecto
             sound(8);
             JOptionPane.showMessageDialog(view, "COLOR INCORRECTO", "HAS PERDIDO", JOptionPane.ERROR_MESSAGE, x);
-            reestart();
+            restart();
         }
     }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
 }

@@ -32,7 +32,7 @@ public class Data {
         level = new Level();
         scores = new BestScore();
         score = new Score();
-        totalTime = 30;
+        totalTime = 31;
         reproductionTime = 1000;
     }
 
@@ -49,6 +49,11 @@ public class Data {
     }
 
     public int getTotalTime() {
+        return totalTime;
+    }
+
+    public int setTotalTime(int totalTime) {
+        this.totalTime = totalTime;
         return totalTime;
     }
 

@@ -76,4 +76,8 @@ public class Service {
     public Score resetScore(){
         return data.getScore().resetScore();
     }
+
+    public int setTotalTime(int i){
+        return data.setTotalTime(i);
+    }
 }
